@@ -1,5 +1,6 @@
 import classNames from "classnames";
 import CustomBreadCrumb from "components/CustomBreadCrumb";
+import { APPROVAL_STATUS } from "constants/app";
 import { useSelector } from "react-redux";
 import { useParams } from "react-router";
 import { getJobRequestById } from "redux/jobRequest/selector";
@@ -20,9 +21,9 @@ const JobRequestDetail = (props) => {
 	const classLabel = classNames(
 		"label",
 		"absolute",
-		{ approval: jobDetail?.status === 1 },
-		{ reject: jobDetail?.status === 0 },
-		{ waiting: jobDetail?.status === null }
+		{ approval: jobDetail?.status === APPROVAL_STATUS.DA_DUYET },
+		{ reject: jobDetail?.status === APPROVAL_STATUS.TU_CHOI },
+		{ waiting: jobDetail?.status === APPROVAL_STATUS.CHO_DUYET }
 	);
 
 	if (!jobDetail) {

@@ -13,6 +13,7 @@
 		"@testing-library/react": "^11.2.7",
 		"@testing-library/user-event": "^12.8.3",
 		"axios": "^0.24.0",
+		"chart.js": "^3.6.2",
 		"classnames": "^2.3.1",
 		"i": "^0.3.7",
 		"moment": "^2.29.1",

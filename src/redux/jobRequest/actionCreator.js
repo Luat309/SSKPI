@@ -31,6 +31,13 @@ export const fetchJobRequest = () => async (dispatch) => {
 			});
 		})
 		.catch((error) => {
+			if(error.response.status === 401) {
+				alert("Phiên đăng nhập đã hết hạn!");
+
+				localStorage.removeItem("currentUser");
+				window.location.href = "/login";
+			}
+
 			dispatch({
 				type: JOBREQUEST_FETCH,
 				data: "error",
@@ -48,17 +55,7 @@ export const insertJobRequest = (data, callback) => (dispatch) => {
 	service
 		.createJobRequest(data)
 		.then((res) => {
-			dispatch({
-				type: JOBREQUEST_INSERT,
-				message: "Thêm yêu cầu thành công!",
-				payload: {
-					...res.data,
-					petitioner: {
-						id: getIdCurrentUser(),
-						name: nameCurrentUser,
-					},
-				},
-			});
+			dispatch(fetchJobRequest());
 
 			dispatch(showMessage("Thêm yêu cầu thành công!"));
 			callback();
@@ -124,25 +121,25 @@ export const deleteJobRequest = (id) => (dispatch) => {
 	service
 		.deleteJobRequest(id)
 		.then((res) => {
+			const nameCurrentUser = getNameCurrentUser();
+
 			dispatch(fetchJobRequest());
 
 			dispatch(showMessage("Xóa thành công!"));
-		})
-		.catch((error) => {
-			const nameCurrentUser = getNameCurrentUser();
-
-			dispatch({
-				type: JOBREQUEST_DELETE,
-				message: error.message,
-			});
-
-			dispatch(showMessage(error.message, "ERROR"));
 
 			emitEvent(
 				`<b>${nameCurrentUser}</b> đã xóa một yêu cầu tuyển dụng`,
 				`/admin/jobrequest`,
 				"JOBREQUEST/DELETED"
 			);
+		})
+		.catch((error) => {
+			dispatch({
+				type: JOBREQUEST_DELETE,
+				message: error.message,
+			});
+
+			dispatch(showMessage(error.message, "ERROR"));
 		});
 };
 

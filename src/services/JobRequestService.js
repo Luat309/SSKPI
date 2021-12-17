@@ -3,9 +3,11 @@ import {
 	JOBREQUEST_CREATE,
 	JOBREQUEST_DELETE,
 	JOBREQUEST_EDIT,
+	JOBREQUEST_EXPORT,
 	JOBREQUEST_LIST,
 } from "constants/apiPath";
 import { APPROVAL_STATUS } from "constants/app";
+import { get } from "react-hook-form";
 import { Utils } from "./util";
 
 export default class JobRequestService {
@@ -36,5 +38,9 @@ export default class JobRequestService {
 			status: APPROVAL_STATUS.TU_CHOI,
 			reason: reason,
 		});
+	}
+
+	exportPDF(id) {
+		return Utils.get(JOBREQUEST_EXPORT + id)
 	}
 }

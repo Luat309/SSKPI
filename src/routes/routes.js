@@ -12,6 +12,7 @@ import {
     JOBREQUEST_CREATE,
     JOBREQUEST_EDIT,
     JOBREQUEST_APPROVAL,
+    JOBREQUEST_REPORT,
     //   REPORT,
     CANDIDATE_INTERVIEW_LIST,
     CANDIDATE_INTERVIEW_SHOW,
@@ -21,6 +22,7 @@ import {
     CHANGE_PASSWORD,
 } from "constants/appPath";
 import { USER } from "../constants/appPath";
+import JobRequestReport from "features/jobRequest/JobRequestReport";
 
 const CandidateList = lazy(() =>
     import ("features/candidate/CandidateList"));
@@ -95,6 +97,11 @@ const routes = [{
         name: "jobrequestApproval",
         component: JobRequestApproval,
         exact: true,
+    },
+    {
+        path: JOBREQUEST_REPORT,
+        name: "jobrequestReport",
+        component: JobRequestReport,
     },
     {
         path: CANDIDATE,

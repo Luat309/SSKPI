@@ -2,7 +2,6 @@ import { Controller } from "react-hook-form";
 import { classNames } from "primereact/utils";
 import { Calendar } from "primereact/calendar";
 import { ERROR_FORM_MESSAGE } from "constants/app";
-import formatTime from "utils/formatTime";
 
 const minDate = new Date();
 
@@ -13,10 +12,13 @@ const CalenderController = ({
 	name,
 	errors,
 	showTime = false,
+	timeOnly,
+	isMindata = true,
+	customClass = "p-field p-col-12 p-md-6",
 	...rest
 }) => {
 	return (
-		<div className="p-field p-col-12 p-md-6">
+		<div className={customClass}>
 			<label
 				htmlFor={name}
 				className={classNames({ "p-error": errors.name })}
@@ -38,19 +40,9 @@ const CalenderController = ({
 						showButtonBar
 						showTime={showTime}
 						showSeconds={showTime}
-						minDate={minDate}
+						minDate={isMindata ? minDate : false}
+						timeOnly={timeOnly}
 						{...field}
-						// onChange={(e) => {
-						// 	if (showTime) {
-						// 		return field.onChange(
-						// 			formatTime.formatShortsDateTime(e.value)
-						// 		);
-						// 	}
-
-						// 	return field.onChange(
-						// 		formatTime.formatShortsDate(e.value)
-						// 	);
-						// }}
 						{...rest}
 					/>
 				)}

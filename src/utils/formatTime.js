@@ -28,6 +28,8 @@ export default {
 		moment(timestamp).utcOffset(7).format("YYYY-MM-DD"),
 	formatShortsDateTime: (timestamp) =>
 		moment(timestamp).utcOffset(7).format("YYYY-MM-DD HH:mm:ss"),
+	formatHour: (timestamp) => 
+		moment(timestamp).utcOffset(7).format("HH:mm:ss"),
 	formatDateMonth: (timestamp) =>
 		moment(timestamp).utcOffset(7).format("DD/MM"),
 	formatDate: (timestamp) => moment(timestamp).utcOffset(7).format("DD"),

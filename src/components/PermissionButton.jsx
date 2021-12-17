@@ -5,10 +5,10 @@ import { getRoleCurrentUser } from "utils/localStorage";
 
 const PermissionButton = ({ name, ...rest }) => {
 	let button = <></>;
-
-	const role = getRoleCurrentUser();
-
+	
 	if (PERMISSION_BUTTON[name]) {
+		const role = getRoleCurrentUser();
+		
 		const check = PERMISSION_BUTTON[name].indexOf(role);
 
 		if (check !== KHONG_TON_TAI) {

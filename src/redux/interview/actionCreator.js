@@ -51,14 +51,11 @@ export const createInterview = (data, callback) => async(dispatch) => {
     service
         .createInterview(data)
         .then((res) => {
-            dispatch({
-                type: INTERVIEW_INSERT,
-                message: "Tạo lịch phỏng vấn thành công!",
-                payload: res.data,
-                status: STATUS_REQUEST.SUCCEEDED,
-            });
+            dispatch(fetchInterview());
 
-            dispatch(showMessage("Tạo lịch phỏng vấn thành công!", callback));
+            dispatch(showMessage("Tạo lịch phỏng vấn thành công!"));
+
+            callback();
 
             emitEvent(
                 `<b>${nameCurrentUser}</b> đã tạo mới một lịch phỏng vấn`,

@@ -20,6 +20,7 @@ import { APPROVAL_STATUS } from "constants/app";
 import formatTime from "utils/formatTime";
 import { compareTimeFromTo } from "utils/compareTime";
 import { genStyle, genColumns } from "utils/genColumns";
+import JobRequestService from "services/JobRequestService";
 
 const JobRequestList = () => {
 	const dispatch = useDispatch();
@@ -28,6 +29,7 @@ const JobRequestList = () => {
 	const [filter, setFilter] = useState(false);
 	const [statusFilter, setStatusFilter] = useState([]);
 	const [deadLine, setDeadLine] = useState([]);
+	const service = new JobRequestService();
 
 	const items = [
 		{ label: "Yêu cầu tuyển dụng", url: "/admin/jobrequest" },
@@ -62,6 +64,10 @@ const JobRequestList = () => {
 	const handleClickApproval = (data) => {
 		history.push("/admin/jobrequest/approval/" + data.id);
 	};
+
+	const handleExport = async (data) => {
+		window.location.href = "http://34.124.182.156/api/pdf/" + data.id;
+	}
 
 	const genFormatTimeCol = (data) => {
 		return formatTime.formatShortDate(data.deadline);
@@ -128,6 +134,21 @@ const JobRequestList = () => {
 					icon="pi pi-check-circle"
 					disabled={data.status !== APPROVAL_STATUS.CHO_DUYET}
 				/>
+				<PermissionButton
+					name="viewDetailJobRequest"
+					tooltip="Báo cáo tuyển dụng"
+					onClick={() => history.push(`/admin/jobrequest/${data.id}/report`)}
+					className="p-button-rounded p-button-text p-button-danger"
+					icon="pi pi-chart-line"
+				/>
+				<PermissionButton
+					name="viewDetailJobRequest"
+					tooltip="Xuất file PDF"
+					onClick={() => handleExport(data)}
+					className="p-button-rounded p-button-text p-button-danger"
+					icon="pi pi-file-pdf"
+					disabled={data.status !== APPROVAL_STATUS.DA_DUYET}
+				/>
 			</>
 		);
 	};
@@ -179,7 +200,7 @@ const JobRequestList = () => {
 	}, [deadLine, statusFilter, data]);
 
 	const cols = [
-		{ field: "title", header: "Tên dự án", style: genStyle("250px") },
+		{ field: "title", header: "Tên dự án", style: genStyle("250px", false) },
 		{
 			field: "deadline",
 			body: genFormatTimeCol,
@@ -189,7 +210,7 @@ const JobRequestList = () => {
 		{
 			field: "position",
 			header: "Vị trí tuyển dụng",
-			style: genStyle("250px"),
+			style: genStyle("200px", false),
 		},
 		{ field: "amount", header: "Số lượng tuyển", style: genStyle("120px") },
 		{

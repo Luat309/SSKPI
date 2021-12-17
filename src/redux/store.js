@@ -9,8 +9,6 @@ import { fetchInterview } from "./interview/actionCreator";
 import { getListUsers } from "./user/actionCreator";
 
 import { getCandidate } from "./candidate/action";
-import { getRoleCurrentUser } from "utils/localStorage";
-import { HR_MANAGER, HR, INTERVIEWER, MANAGER } from "constants/app";
 
 const store = createStore(
 	rootReducer,
@@ -18,31 +16,12 @@ const store = createStore(
 );
 
 if (localStorage.getItem("currentUser")) {
-	const role = getRoleCurrentUser();
 
-	switch (role) {
-		case HR_MANAGER:
-			store.dispatch(getListUsers());
-			store.dispatch(fetchJobRequest());
-			store.dispatch(fetchInterview());
-			store.dispatch(getCandidate());
-			break;
+	store.dispatch(getListUsers());
+	store.dispatch(fetchJobRequest());
+	store.dispatch(fetchInterview());
+	store.dispatch(getCandidate());
 
-		case HR:
-			store.dispatch(fetchJobRequest());
-			store.dispatch(fetchInterview());
-			store.dispatch(getCandidate());
-			break;
-
-		case MANAGER:
-		case INTERVIEWER:
-			store.dispatch(fetchJobRequest());
-			store.dispatch(fetchInterview());
-			break;
-
-		default:
-			break;
-	}
 }
 
 export default store;
