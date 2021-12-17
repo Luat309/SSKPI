@@ -120,7 +120,7 @@ export const PERMISSION_MENU = [
 	{
 		id: 13,
 		parentMenu: 0,
-		name: "Quản lý ứng dụng",
+		name: "Quản lý user",
 		icon: "pi pi-fw pi-link",
 		role: [HR_MANAGER],
 	},
