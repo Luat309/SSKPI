@@ -26,5 +26,6 @@ export const getCandidateInterviews = (state) => {
 			jobRequest?.[candidate?.[item.candidate_id]?.job_id]?.position,
 		round: interview?.[item.interview_id]?.round_no,
 		location: interview?.[item.interview_id]?.location,
+		idInterview: interview?.[item.interview_id]?.id,
 	}));
 };

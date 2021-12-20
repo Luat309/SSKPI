@@ -121,14 +121,14 @@ export const PERMISSION_MENU = [
 	{
 		id: 13,
 		parentMenu: 0,
-		name: "Quản lý ứng dụng",
+		name: "Quản lý",
 		icon: "pi pi-fw pi-cog",
 		role: [HR_MANAGER],
 	},
 	{
 		id: 14,
 		parentMenu: 13,
-		name: "Quản lý nhân viên",
+		name: "Quản lý User",
 		path: USER,
 		role: [HR_MANAGER],
 	},

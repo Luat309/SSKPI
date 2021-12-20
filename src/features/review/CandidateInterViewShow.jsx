@@ -17,23 +17,11 @@ import PermissionButton from "components/PermissionButton";
 const items = [{ label: "Đánh Giá Ứng viên" }, { label: " Đánh giá" }];
 const CandidateInterViewShow = () => {
 	moment.locale("vi");
-	const dispatch = useDispatch();
 	const [isOpen, setIsOpen] = useState(false);
 	const [valueDetail, setValueDetail] = useState();
 	const history = useHistory();
 	const candidateInterview = useSelector(getCandidateInterviews);
-	const unique = [];
-	candidateInterview.map((x) =>
-		unique.filter((a) => a.candidate_id === x.candidate_id).length > 0
-			? null
-			: unique.push(x)
-	);
-
-	useEffect(() => {
-		dispatch(getCandidateInterview());
-		dispatch(fetchJobRequest());
-		dispatch(getCandidate());
-	}, [dispatch]);
+	const { user } = JSON.parse(localStorage.getItem("currentUser"));
 
 	const timeBodyTemplate = (rowData) => {
 		return (
@@ -69,17 +57,19 @@ const CandidateInterViewShow = () => {
 					icon="pi pi-eye"
 				/>
 
-				<PermissionButton
-					name="editCandidate"
-					tooltip="Cập nhật"
-					onClick={() =>
-						history.push(
-							`/admin/candidate/interview/edit/${rowData.id}`
-						)
-					}
-					className="p-button-rounded p-button-text p-button-help"
-					icon="pi pi-pencil"
-				/>
+				{Number(rowData?.user_id) === Number(user.id) && (
+					<PermissionButton
+						name="editCandidate"
+						tooltip="Cập nhật"
+						onClick={() =>
+							history.push(
+								`/admin/candidate/interview/edit/${rowData.id}`
+							)
+						}
+						className="p-button-rounded p-button-text p-button-help"
+						icon="pi pi-pencil"
+					/>
+				)}
 			</div>
 		);
 	};
@@ -96,7 +86,7 @@ const CandidateInterViewShow = () => {
 			</Dialog>
 			<CustomBreadCrumb items={items} />
 			<div className="card">
-				<CustomDataTable dataTable={unique}>
+				<CustomDataTable dataTable={candidateInterview}>
 					<Column
 						field="candidate_id"
 						header="Thời gian phỏng vấn"

@@ -1,6 +1,6 @@
 import { FORGOT_PASSWORD } from "constants/appPath";
 import { Button } from "primereact/button";
-import React from "react";
+import React, { useState } from "react";
 import { useForm } from "react-hook-form";
 import { useDispatch } from "react-redux";
 import { useHistory, useLocation } from "react-router";
@@ -11,6 +11,7 @@ import genElementsForm from "utils/genElementsForm";
 const RestPassword = () => {
 	const { search } = useLocation();
 	const dispatch = useDispatch();
+	const [err, setError] = useState();
 	const {
 		control,
 		formState: { errors },
@@ -36,12 +37,16 @@ const RestPassword = () => {
 	const formRender = genElementsForm(fields, control, errors);
 	const onHandleSubmit = async (data) => {
 		try {
-			await service.restPassword({
-				...data,
-				token: search.replace("?token=", ""),
-			});
-			dispatch(showMessage("Đổi mật khẩu thành công"));
-			history.push("/login");
+			if (data.password === data.password_confirmation) {
+				await service.restPassword({
+					...data,
+					token: search.replace("?token=", ""),
+				});
+				dispatch(showMessage("Đổi mật khẩu thành công"));
+				history.push("/login");
+			} else {
+				setError("Mật khẩu không khớp. Vui lòng thử lại");
+			}
 		} catch (error) {}
 	};
 	return (
@@ -49,6 +54,7 @@ const RestPassword = () => {
 			<h1 style={{ textAlign: "center", marginTop: "10%" }}>
 				Vui lòng bạn nhập mật khẩu mới
 			</h1>
+			<p style={{ color: "red", textAlign: "center" }}>{err}</p>
 			<form onSubmit={handleSubmit(onHandleSubmit)}>
 				<div className="p-fluid p-formgrid p-grid flex-direction align-items">
 					{formRender}
