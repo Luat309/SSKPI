@@ -1,17 +1,27 @@
-import { APPROVAL_STATUS } from "constants/app";
+import { APPROVAL_STATUS, MANAGER } from "constants/app";
+import { getIdCurrentUser, getRoleCurrentUser } from "utils/localStorage";
 
 export const getJobRequest = (state) => {
 	if (Array.isArray(state.jobRequest.data)) {
-		return state.jobRequest.data.map((item) => {
+		const role = getRoleCurrentUser();
+		const id = getIdCurrentUser();
+
+		const data = state.jobRequest.data.map((item) => {
 			return {
 				...item,
-				petitioner: item.petitioner.name,
+				petitioner_name: item.petitioner.name,
 				// status:
 				// 	item.status === null || item.status === undefined
 				// 		? APPROVAL_STATUS.CHO_DUYET
 				// 		: item.status,
 			};
 		});
+
+		if(role === MANAGER) {
+			return data.filter(item => item.petitioner.id === id)
+		}
+
+		return data;
 	} else {
 		return state.jobRequest.data;
 	}

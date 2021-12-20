@@ -54,7 +54,7 @@ const Login = () => {
 				window.location.href = "/admin/jobrequest";
 			})
 			.catch((error) => {
-				alert("Sai tài khoản hoặc mật khẩu, vui lòng thử lại!");
+				alert(error?.response?.data?.error);
 				return;
 			});
 

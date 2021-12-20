@@ -8,7 +8,7 @@ import { Button } from "primereact/button";
 import { getApprovedJobRequest } from "redux/jobRequest/selector";
 import { getCandidates } from "redux/candidate/selector";
 import { createInterview } from "redux/interview/actionCreator";
-import { getAllUsers } from "redux/user/selector";
+import { getManagerAndHrManager } from "redux/user/selector";
 import { KHONG_TON_TAI, ROUND_INTERVIEW } from "constants/app";
 import genElementsForm from "utils/genElementsForm";
 import formatTime from "utils/formatTime"
@@ -30,7 +30,7 @@ const FormInsertInterview = (props) => {
 
 	const job = watch("job_id");
 
-	const users = useSelector(getAllUsers);
+	const users = useSelector(getManagerAndHrManager);
 	const approvedJobRequest = useSelector(getApprovedJobRequest);
 	const candidates = useSelector(getCandidates);
 	let candidateFilter = [];

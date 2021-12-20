@@ -5,7 +5,7 @@ import { useHistory } from "react-router";
 import logo from "images/logo.png";
 import { Menu } from "primereact/menu";
 import { Button } from "primereact/button";
-import { InputText } from "primereact/inputtext";
+// import { InputText } from "primereact/inputtext";
 import { Badge } from "primereact/badge";
 import { iconStyle } from "styles/icon.style";
 import { MegaMenu } from "primereact/megamenu";
@@ -18,6 +18,7 @@ import {
 	// getRoleCurrentUser,
 } from "utils/localStorage";
 import { NODEJS } from "constants/app";
+import { useSelector } from "react-redux";
 // import { NODEJS } from "constants/app";
 const sound = require("./sound.mp3");
 
@@ -27,6 +28,7 @@ const TopBar = (props) => {
 	const history = useHistory();
 	const [notifications, setNotifications] = useState([]);
 	const [visible, setVisible] = useState(false);
+	const jobRequest = useSelector((state) => state.jobRequest.data);
 
 	const playSound = () => {
 		const audio = new Audio(sound.default);
@@ -34,35 +36,94 @@ const TopBar = (props) => {
 		audio.play();
 	};
 
+	const getNoti = async () => {
+		const requests = {};
+		jobRequest.forEach((item) => (requests[item?.id] = item));
+
+		const res = await fetch(NODEJS + "api/node/notifications", {
+			method: "post",
+			body: JSON.stringify({
+				id: getIdCurrentUser(),
+				role: getRoleCurrentUser(),
+			}),
+			headers: {
+				"Content-Type": "application/json",
+			},
+		});
+		let data = await res.json();
+
+		data = data.filter((item) => {
+			if (
+				["JOBREQUEST/APPROVED", "JOBREQUEST/REJECTED"].indexOf(
+					item.type
+				) !== -1
+			) {
+				const idJob = item.path.split("/")[4];
+
+				const idCurrentUser = getIdCurrentUser();
+
+				if (idCurrentUser == requests[idJob]?.petitioner?.id)
+					return true;
+
+				return false;
+			}
+
+			return true;
+		});
+
+		setNotifications(data);
+	};
+
 	useEffect(() => {
-	  (async () => {
-	    const res = await fetch(NODEJS + "api/node/notifications", {
-	      method: "post",
-	      body: JSON.stringify({
-	        id: getIdCurrentUser(),
-	        role: getRoleCurrentUser(),
-	      }),
-	      headers: {
-	        "Content-Type": "application/json",
-	      },
-	    });
-	    const data = await res.json();
+		getNoti();
 
-	    setNotifications((prevState) => prevState.concat(data));
-	  })();
-
-	  document.addEventListener("click", () => {
-	    setVisible(false);
-	  });
-	}, []);
+		document.addEventListener("click", () => {
+			setVisible(false);
+		});
+	}, [jobRequest]);
 
 	useEffect(() => {
-		socket.on("res_notification", (data) => {
+		socket.on("res_notification", async (data) => {
 			const idCurrentUser = getIdCurrentUser();
 
 			if (data.userCreated !== idCurrentUser) {
 				playSound();
-				setNotifications((prevState) => [data, ...prevState]);
+
+				const requests = {};
+				jobRequest.forEach((item) => (requests[item?.id] = item));
+
+				const res = await fetch(NODEJS + "api/node/notifications", {
+					method: "post",
+					body: JSON.stringify({
+						id: getIdCurrentUser(),
+						role: getRoleCurrentUser(),
+					}),
+					headers: {
+						"Content-Type": "application/json",
+					},
+				});
+				let data = await res.json();
+
+				data = data.filter((item) => {
+					if (
+						["JOBREQUEST/APPROVED", "JOBREQUEST/REJECTED"].indexOf(
+							item.type
+						) !== -1
+					) {
+						const idJob = item.path.split("/")[4];
+
+						const idCurrentUser = getIdCurrentUser();
+
+						if (idCurrentUser == requests[idJob]?.petitioner?.id)
+							return true;
+
+						return false;
+					}
+
+					return true;
+				});
+
+				setNotifications(data);
 			}
 		});
 	}, []);
@@ -71,21 +132,18 @@ const TopBar = (props) => {
 	const itemsAccount = [
 		{
 			label: "Thông tin tài khoản",
-			icon: "pi pi-external-link",
 			command: (e) => {
 				history.push("/admin/user/infomation");
 			},
 		},
 		{
 			label: "Đổi mật khẩu",
-			icon: "pi pi-external-link",
 			command: (e) => {
 				history.push("/admin/user/change_password");
 			},
 		},
 		{
 			label: "Đăng xuất",
-			icon: "pi pi-upload",
 			command: (e) => {
 				localStorage.removeItem("currentUser");
 				history.push("/login");
