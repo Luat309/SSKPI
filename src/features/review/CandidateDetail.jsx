@@ -1,3 +1,4 @@
+import moment from "moment";
 import React from "react";
 import { useSelector } from "react-redux";
 import { getCandidateInterviews } from "redux/candidateInterview/selector";
@@ -61,7 +62,9 @@ const CandidateDetail = ({ data }) => {
 										</p>
 										<p>
 											Thời gian có thể onboard:{" "}
-											{item?.time_onbroad}
+											{moment(item?.time_onbroad).format(
+												" DD/MM/YYYY"
+											)}
 										</p>
 										<p>Nhận xét</p>
 										<span

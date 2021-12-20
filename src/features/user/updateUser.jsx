@@ -24,7 +24,7 @@ const UpdateUser = ({ user }) => {
 		reset({ ...newData });
 	}, []);
 	const onHandleSubmit = (data) => {
-		dispatch(updateUser({ ...data, roles: [data.roles] }));
+		dispatch(updateUser({ ...data, roleIds: [data.roles] }));
 	};
 	return (
 		<div className="card">

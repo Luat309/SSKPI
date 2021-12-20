@@ -34,27 +34,27 @@ const TopBar = (props) => {
 		audio.play();
 	};
 
-	useEffect(() => {
-	  (async () => {
-	    const res = await fetch(NODEJS + "api/node/notifications", {
-	      method: "post",
-	      body: JSON.stringify({
-	        id: getIdCurrentUser(),
-	        role: getRoleCurrentUser(),
-	      }),
-	      headers: {
-	        "Content-Type": "application/json",
-	      },
-	    });
-	    const data = await res.json();
+	// useEffect(() => {
+	//   (async () => {
+	//     const res = await fetch(NODEJS + "api/node/notifications", {
+	//       method: "post",
+	//       body: JSON.stringify({
+	//         id: getIdCurrentUser(),
+	//         role: getRoleCurrentUser(),
+	//       }),
+	//       headers: {
+	//         "Content-Type": "application/json",
+	//       },
+	//     });
+	//     const data = await res.json();
 
-	    setNotifications((prevState) => prevState.concat(data));
-	  })();
+	//     setNotifications((prevState) => prevState.concat(data));
+	//   })();
 
-	  document.addEventListener("click", () => {
-	    setVisible(false);
-	  });
-	}, []);
+	//   document.addEventListener("click", () => {
+	//     setVisible(false);
+	//   });
+	// }, []);
 
 	useEffect(() => {
 		socket.on("res_notification", (data) => {

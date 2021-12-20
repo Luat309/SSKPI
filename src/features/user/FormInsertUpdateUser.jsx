@@ -1,8 +1,9 @@
 import InputTextController from "components/InputTextController";
 import { Button } from "primereact/button";
+import { useState } from "react";
 import { useEffect } from "react";
 import { useForm } from "react-hook-form";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { AddUser } from "redux/user/actionCreator";
 import genElementsForm from "utils/genElementsForm";
 
@@ -13,12 +14,11 @@ const FormInsertUpdateUser = (props) => {
 		handleSubmit,
 		reset,
 	} = useForm();
+	const [err, setErr] = useState();
 	const dispatch = useDispatch();
+	const { data: user } = useSelector((state) => state.user);
 
-	const status = [
-		{ status: 1, name: "Hoạt động" },
-		{ status: 0, name: "Ngừng hoạt động" },
-	];
+	const status = [{ status: 1, name: "Hoạt động" }];
 	const roles = [
 		{ role: 0, name: "Trưởng phòng" },
 		{ role: 1, name: "Trưởng phòng nhân sự" },
@@ -35,7 +35,6 @@ const FormInsertUpdateUser = (props) => {
 		},
 		{ label: "Tên nhân viên", name: "name", type: "inputText" },
 		{ label: "Email", name: "email", type: "inputText" },
-		// { label: "Mật khẩu", name: "password", type: "inputText" },
 		{
 			label: "Chức vụ",
 			name: "role",
@@ -53,23 +52,37 @@ const FormInsertUpdateUser = (props) => {
 	];
 
 	const onSubmit = (data) => {
-		dispatch(
-			AddUser({
-				...data,
-				status: data.status.status,
-				roleIds: [data.role.role],
-			})
+		const findEmployeeCode = user.find(
+			(item) => item.employee_code === data.employee_code
 		);
+		const findEmail = user.find((item) => item.email === data.email);
+		if (data.password !== data.password_confirmation) {
+			setErr("Mật khẩu không trùng khớp");
+		} else if (findEmployeeCode) {
+			setErr("Mã nhân viên đã tồn tại");
+		} else if (findEmail) {
+			setErr("Email đã tồn tại");
+		} else {
+			dispatch(
+				AddUser({
+					...data,
+					status: data.status.status,
+					roleIds: [data.role.role],
+				})
+			);
+			props.hideDialog();
+		}
 	};
 
 	const formRender = genElementsForm(fields, control, errors);
 
 	useEffect(() => {
-		reset(props.data);
-	}, [reset, props.data]);
+		reset({ status: { status: 1, name: "Hoạt động" } });
+	}, [reset]);
 
 	return (
 		<form onSubmit={handleSubmit(onSubmit)}>
+			<p style={{ color: "red", textAlign: "center" }}> {err}</p>
 			<div className="p-fluid p-formgrid p-grid">
 				{formRender}
 				{props.actionType !== "UPDATE" ? (
@@ -79,6 +92,7 @@ const FormInsertUpdateUser = (props) => {
 							name="password"
 							control={control}
 							errors={errors}
+							minLength={6}
 						/>
 						<div className="p-col-6"></div>
 						<InputTextController
@@ -86,6 +100,7 @@ const FormInsertUpdateUser = (props) => {
 							name="password_confirmation"
 							control={control}
 							errors={errors}
+							minLength={6}
 						/>
 					</>
 				) : (
