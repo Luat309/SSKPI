@@ -10,6 +10,7 @@ import { getJobRequest, getStatusJobRequest } from "redux/jobRequest/selector";
 import { fetchJobRequest } from "redux/jobRequest/actionCreator";
 import { ERROR_FORM_MESSAGE, STATUS_REQUEST } from "constants/app";
 import { CANDIDATE } from "constants/appPath";
+import { useState } from "react";
 
 const CandidateCreat = () => {
 	const items = [{ label: "Ứng viên" }, { label: " Thêm ứng viên" }];
@@ -17,6 +18,8 @@ const CandidateCreat = () => {
 	const dispatch = useDispatch();
 	const status = useSelector(getStatusJobRequest);
 	const data = useSelector(getJobRequest);
+	const [errCV, setErrCV] = useState();
+	const [errImg, setErrImg] = useState();
 
 	useEffect(() => {
 		if (status === STATUS_REQUEST.IDLE) {
@@ -32,11 +35,29 @@ const CandidateCreat = () => {
 	} = useForm({});
 
 	let formData = new FormData();
-
 	const onHandleSubmit = (data) => {
-		if (data.image[0]) {
+		console.log(data.cv[0]);
+		if (
+			(data.image[0] && data.image[0].type === "image/jpeg") ||
+			(data.image[0] && data.image[0].type === "image/png")
+		) {
 			formData.append("image", data.image[0]);
+			setErrImg("");
+		} else {
+			setErrImg("Hình ảnh không đúng định dạng 'jpg/png'");
 		}
+		if (
+			data.cv[0].type === "application/pdf" ||
+			data.cv[0].type === "application/doc" ||
+			data.cv[0].type ===
+				"application/vnd.openxmlformats-officedocument.wordprocessingml.document"
+		) {
+			formData.append("cv", data.cv[0]);
+			setErrCV("");
+		} else {
+			setErrCV("CV không đúng với định dạng 'pdf,doc,docx'");
+		}
+
 		formData.append("name", data.name);
 		formData.append("phone", data.phone);
 		formData.append("source", data.source);
@@ -45,12 +66,13 @@ const CandidateCreat = () => {
 		formData.append("school", data.school);
 		formData.append("job_id", data.job_id);
 		formData.append("status", data.status);
-		formData.append("cv", data.cv[0]);
-		dispatch(addCandidate(formData));
-		setTimeout(() => {
-			history.push(CANDIDATE);
-		}, 2000);
-		reset();
+		if (errCV === "" && errImg === "") {
+			dispatch(addCandidate(formData));
+			setTimeout(() => {
+				history.push(CANDIDATE);
+			}, 2000);
+			reset();
+		}
 	};
 
 	return (
@@ -192,6 +214,9 @@ const CandidateCreat = () => {
 									id="image"
 									{...register("image")}
 								/>
+								<a href style={{ color: "red" }}>
+									{errImg}
+								</a>
 							</div>
 							<div>
 								<label htmlFor="lastname6">CV*</label>
@@ -201,6 +226,9 @@ const CandidateCreat = () => {
 									id="cv"
 									{...register("cv", { required: true })}
 								/>
+								<a href style={{ color: "red" }}>
+									{errCV}
+								</a>
 								{errors.cv && (
 									<span
 										style={{
