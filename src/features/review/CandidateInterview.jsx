@@ -4,7 +4,7 @@ import { useForm } from "react-hook-form";
 import { useDispatch } from "react-redux";
 import { useHistory } from "react-router";
 import { createCandidateInterview } from "redux/candidateInterview/action";
-import { editInterview } from "redux/interview/actionCreator";
+import { editInterview, fetchInterview } from "redux/interview/actionCreator";
 import genElementsForm from "utils/genElementsForm";
 import "./style.scss";
 
@@ -36,7 +36,7 @@ const CandidateInterview = ({ data: item }) => {
 
 	const fields = [
 		{
-			label: "Hệ thống,login",
+			label: "Hệ thống,logic",
 			name: "thinking",
 			type: "dropdown",
 			options: option,

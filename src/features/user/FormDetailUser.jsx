@@ -19,7 +19,7 @@ const FormDetailUser = ({ detailUser }) => {
 	];
 
 	return (
-		<Fieldset legend="Thông tin nhân viên" toggleable>
+		<Fieldset legend="Thông tin User" toggleable>
 			<div className="p-grid">
 				{fields.map(({ name, label, value }) => (
 					<div key={name} className="p-col-6">

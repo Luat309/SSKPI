@@ -58,7 +58,7 @@ const ForgotPassword = () => {
 							marginTop: "30px",
 						}}
 						type="submit"
-						label="Lưu"
+						label="Gửi"
 					/>
 					<Button
 						style={{

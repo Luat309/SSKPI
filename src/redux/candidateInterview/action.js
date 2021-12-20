@@ -36,11 +36,14 @@ export const editCandidateInterview = (item) => async(dispatch) => {
     try {
         const res = await servicer.editCandidateInterview(item);
         dispatch({ type: CANDIDATE_INTERVIEW_EDIT, payload: res.data });
+        dispatch(showMessage("Sửa đánh giá thành công!"));
 
         emitEvent(
             `<b>${nameCurrentUser}</b> đã cập nhật một đánh giá`,
             `/admin/candidate/interview/edit/${res.data.id}`,
             "CANDIDATE_INTERVIEW/CREATED"
         );
-    } catch (error) {}
+    } catch (error) {
+        dispatch(showMessage(error.message, "ERROR"));
+    }
 };

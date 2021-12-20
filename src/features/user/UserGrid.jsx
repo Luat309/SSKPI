@@ -7,7 +7,6 @@ import { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 import { showConfirm } from "redux/confirmBox/actionCreator";
 import { Dialog } from "primereact/dialog";
-import FeaturesDialog from "./featuresDialog";
 import { DisableUser, RemoveUser } from "redux/user/actionCreator";
 import UpdateUser from "./updateUser";
 
@@ -129,14 +128,12 @@ const UserGrid = (props) => {
 				visible={visible}
 				style={{ width: "60%" }}
 				onHide={() => setVisible(false)}
-			>
-				<FeaturesDialog />
-			</Dialog>
-			<Fieldset className="mt-1" legend="Danh sách nhân viên" toggleable>
+			></Dialog>
+			<Fieldset className="mt-1" legend="Danh sách User" toggleable>
 				<Button
 					icon="pi pi-plus"
 					className="p-mb-2"
-					label="Thêm nhân viên"
+					label="Thêm User"
 					onClick={() => props.onOpenDialog()}
 				/>
 				<CustomDataTable

@@ -26,7 +26,11 @@ const UserList = () => {
 	const handleOpenDialog = (data = {}, actionType = "INSERT") => {
 		setVisible(true);
 		setBodyDialog(
-			<FormInsertUpdateUser data={data} actionType={actionType} />
+			<FormInsertUpdateUser
+				hideDialog={() => setVisible(false)}
+				data={data}
+				actionType={actionType}
+			/>
 		);
 
 		if (actionType === "INSERT") {
@@ -38,11 +42,9 @@ const UserList = () => {
 
 	const dataFilter = useMemo(() => {
 		setDetailUser(null);
-
 		if (role === 999) return data;
-
 		return data.filter((item) => {
-			return item.roles[0].id === role;
+			return item?.roles[0]?.id === role;
 		});
 	}, [data, role]);
 

@@ -8,6 +8,8 @@ import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { useDispatch } from "react-redux";
 import { getCandidate } from "redux/candidate/action";
+import { getCandidateInterview } from "redux/candidateInterview/action";
+import { getCandidateInterviews } from "redux/candidateInterview/selector";
 import { fetchInterview } from "redux/interview/actionCreator";
 import { fetchJobRequest } from "redux/jobRequest/actionCreator";
 import { getJobRequest } from "redux/jobRequest/selector";
@@ -19,15 +21,29 @@ const CandidateInterviewList = () => {
 	const job = useSelector(getJobRequest);
 	const [isOpen, setIsOpen] = useState(false);
 	const { data } = useSelector((state) => state.interview);
-
+	const candidateInterview = useSelector(getCandidateInterviews);
 	const { user } = JSON.parse(localStorage.getItem("currentUser"));
 	const [dateInterview, setDateInterview] = useState();
-
 	useEffect(() => {
 		dispatch(fetchInterview());
-		dispatch(fetchJobRequest());
-		dispatch(getCandidate());
-	}, [dispatch]);
+		dispatch(getCandidateInterview());
+	}, []);
+
+	const filter = data.filter((item) => {
+		const exist = item.receiver.find((value) => Number(value) === user.id);
+		if (exist) {
+			return item;
+		}
+		return "";
+	});
+
+	const filterImp = (data) => {
+		return data.filter(
+			(val) =>
+				candidateInterview.find((item) => item.interview_id === val.id)
+					?.interview_id !== val.id
+		);
+	};
 
 	const jobBodyTemplate = (rowData) => {
 		return job.map
@@ -59,15 +75,12 @@ const CandidateInterviewList = () => {
 	const actionBodyTemplate = (rowData) => {
 		return (
 			<>
-				{moment(rowData.time_end).isBefore() &&
-					rowData.receiver.find(
-						(item) => Number(item) === user.id
-					) && (
-						<Button
-							onClick={() => handleCandidateInterView(rowData)}
-							label="Đánh giá"
-						/>
-					)}
+				{moment(rowData.time_end).isBefore() && (
+					<Button
+						onClick={() => handleCandidateInterView(rowData)}
+						label="Đánh giá"
+					/>
+				)}
 			</>
 		);
 	};
@@ -85,7 +98,7 @@ const CandidateInterviewList = () => {
 			<CustomBreadCrumb items={items} />
 			<div className="card">
 				<CustomDataTable
-					dataTable={data}
+					dataTable={filterImp(filter)}
 					showSearch={true}
 					selectionMode="single"
 				>
