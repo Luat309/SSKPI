@@ -321,7 +321,7 @@ const CandidateCreat = () => {
 									<option value=""> Chọn dự án </option>
 									{data.map
 										? data.map((item) => {
-												if (item.status === 1) {
+												if (item.status === 2) {
 													return (
 														<option value={item.id}>
 															{item.title} - [
