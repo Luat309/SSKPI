@@ -109,7 +109,7 @@ export const PERMISSION_MENU = [
 		parentMenu: 10,
 		name: "Đánh giá",
 		path: CANDIDATE_INTERVIEW_LIST,
-		role: [MANAGER, HR_MANAGER, INTERVIEWER],
+		role: [MANAGER, INTERVIEWER],
 	},
 	{
 		id: 12,

@@ -30,12 +30,20 @@ const FormInsertInterview = (props) => {
 
 	const job = watch("job_id");
 
-	const users = useSelector(getManagerAndHrManager);
+	const users = useSelector(getManagerAndHrManager).map(user => ({
+		...user, 
+		name: user.name + ' - ' + user.email
+	}));
 	const approvedJobRequest = useSelector(getApprovedJobRequest);
 	const candidates = useSelector(getCandidates);
 	let candidateFilter = [];
 
-	if(job) candidateFilter = candidates.filter(candidate => candidate.job_id === job.id);
+	if(job) candidateFilter = candidates.filter(candidate => candidate.job_id === job.id).map(candidate => ({
+		...candidate,
+		name: candidate.name + ' - ' + candidate.email
+	}));
+
+	console.log(candidateFilter, 'chung em');
 
 	const fields = [
 		{ label: "Tiêu đề", name: "title", type: "inputText" },
