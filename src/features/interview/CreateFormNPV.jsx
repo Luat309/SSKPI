@@ -43,8 +43,6 @@ const FormInsertInterview = (props) => {
 		name: candidate.name + ' - ' + candidate.email
 	}));
 
-	console.log(candidateFilter, 'chung em');
-
 	const fields = [
 		{ label: "Tiêu đề", name: "title", type: "inputText" },
 		{ label: "Ngày phỏng vấn", name: "date", type: "calender", autoFocus: true, },
