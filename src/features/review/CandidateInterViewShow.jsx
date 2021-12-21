@@ -10,6 +10,9 @@ import { Dialog } from "primereact/dialog";
 import CandidateDetail from "./CandidateDetail";
 import { useHistory } from "react-router";
 import PermissionButton from "components/PermissionButton";
+import { useEffect } from "react";
+import { useDispatch } from "react-redux";
+import { getCandidateInterview } from "redux/candidateInterview/action";
 
 const items = [{ label: "Đánh Giá Ứng viên" }, { label: " Đánh giá" }];
 const CandidateInterViewShow = () => {
@@ -19,7 +22,11 @@ const CandidateInterViewShow = () => {
 	const history = useHistory();
 	const candidateInterview = useSelector(getCandidateInterviews);
 	const { user } = JSON.parse(localStorage.getItem("currentUser"));
+	const dispatch = useDispatch();
 
+	useEffect(() => {
+		dispatch(getCandidateInterview());
+	}, []);
 	const timeBodyTemplate = (rowData) => {
 		return (
 			<p>
@@ -56,7 +63,7 @@ const CandidateInterViewShow = () => {
 
 				{Number(rowData?.user_id) === Number(user.id) && (
 					<PermissionButton
-						name="editCandidate"
+						name="evaluate"
 						tooltip="Cập nhật"
 						onClick={() =>
 							history.push(

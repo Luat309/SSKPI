@@ -4,11 +4,12 @@ import { useForm } from "react-hook-form";
 import { useDispatch } from "react-redux";
 import { useHistory } from "react-router";
 import { createCandidateInterview } from "redux/candidateInterview/action";
-import { editInterview, fetchInterview } from "redux/interview/actionCreator";
+import { editInterview } from "redux/interview/actionCreator";
 import genElementsForm from "utils/genElementsForm";
 import "./style.scss";
 
-const currentUser = JSON.parse(localStorage.getItem("currentUser"));
+const { user } = JSON.parse(localStorage.getItem("currentUser"));
+console.log(user?.id);
 
 const CandidateInterview = ({ data: item }) => {
 	const history = useHistory();
@@ -109,8 +110,8 @@ const CandidateInterview = ({ data: item }) => {
 				interview_id: item.id,
 				time_start: item.time_start,
 				time_end: item.time_end,
-				user_id: currentUser?.user?.id,
-				email: currentUser?.user?.name,
+				user_id: user?.id,
+				email: user?.name,
 			})
 		);
 		dispatch(
