@@ -69,7 +69,8 @@ const UpdateUser = ({ user }) => {
 										marginBottom: "7px",
 									}}
 								>
-									Trường này không đựợc để trống.
+									Trường này không đựợc để trống và phải lớn
+									hơn 5 ký tự
 								</span>
 							)}
 						</div>

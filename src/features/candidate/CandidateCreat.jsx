@@ -20,6 +20,8 @@ const CandidateCreat = () => {
 	const data = useSelector(getJobRequest);
 	const [errCV, setErrCV] = useState();
 	const [errImg, setErrImg] = useState();
+	const [errEmail, setErrEmail] = useState();
+	const { cadidate } = useSelector((state) => state.cadidate);
 
 	useEffect(() => {
 		if (status === STATUS_REQUEST.IDLE) {
@@ -36,14 +38,16 @@ const CandidateCreat = () => {
 
 	let formData = new FormData();
 	const onHandleSubmit = (data) => {
-		console.log(data.cv[0]);
 		if (
 			(data.image[0] && data.image[0].type === "image/jpeg") ||
 			(data.image[0] && data.image[0].type === "image/png")
 		) {
-			formData.append("image", data.image[0]);
 			setErrImg("");
-		} else {
+			formData.append("image", data.image[0]);
+		} else if (
+			(data.image[0] && data.image[0].type !== "image/jpeg") ||
+			(data.image[0] && data.image[0].type !== "image/png")
+		) {
 			setErrImg("Hình ảnh không đúng định dạng 'jpg/png'");
 		}
 		if (
@@ -52,21 +56,27 @@ const CandidateCreat = () => {
 			data.cv[0].type ===
 				"application/vnd.openxmlformats-officedocument.wordprocessingml.document"
 		) {
-			formData.append("cv", data.cv[0]);
 			setErrCV("");
+			formData.append("cv", data.cv[0]);
 		} else {
 			setErrCV("CV không đúng với định dạng 'pdf,doc,docx'");
+		}
+		const findEmail = cadidate.find((item) => item.email === data.email);
+		if (findEmail) {
+			setErrEmail("Email đã tồn tại");
+		} else {
+			formData.append("email", data.email);
+			setErrEmail("");
 		}
 
 		formData.append("name", data.name);
 		formData.append("phone", data.phone);
 		formData.append("source", data.source);
-		formData.append("email", data.email);
 		formData.append("experience", data.experience);
 		formData.append("school", data.school);
 		formData.append("job_id", data.job_id);
 		formData.append("status", data.status);
-		if (errCV === "" && errImg === "") {
+		if (errCV === "" || errImg === "" || !findEmail) {
 			dispatch(addCandidate(formData));
 			setTimeout(() => {
 				history.push(CANDIDATE);
@@ -143,6 +153,9 @@ const CandidateCreat = () => {
 											/^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/,
 									})}
 								/>
+								<a href style={{ color: "red" }}>
+									{errEmail}
+								</a>
 								{errors.email && (
 									<span
 										style={{
