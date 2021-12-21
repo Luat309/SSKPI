@@ -2,16 +2,13 @@ import CustomBreadCrumb from "components/CustomBreadCrumb";
 import CustomDataTable from "components/CustomDataTable";
 import moment from "moment";
 import { Column } from "primereact/column";
-import React, { useEffect, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { getCandidateInterview } from "redux/candidateInterview/action";
+import React, { useState } from "react";
+import { useSelector } from "react-redux";
 import "moment/locale/vi";
 import { getCandidateInterviews } from "redux/candidateInterview/selector";
 import { Dialog } from "primereact/dialog";
 import CandidateDetail from "./CandidateDetail";
 import { useHistory } from "react-router";
-import { fetchJobRequest } from "redux/jobRequest/actionCreator";
-import { getCandidate } from "redux/candidate/action";
 import PermissionButton from "components/PermissionButton";
 
 const items = [{ label: "Đánh Giá Ứng viên" }, { label: " Đánh giá" }];
