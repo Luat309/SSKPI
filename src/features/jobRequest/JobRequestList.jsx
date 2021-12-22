@@ -217,7 +217,7 @@ const JobRequestList = () => {
 		},
 		{ field: "amount", header: "Số lượng tuyển", style: genStyle("120px") },
 		{
-			field: "petitioner",
+			field: "petitioner_name",
 			header: "Người yêu cầu",
 			style: genStyle("150px"),
 		},

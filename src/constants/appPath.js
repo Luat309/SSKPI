@@ -38,8 +38,8 @@ export const PERMISSION_MENU = [
 		id: 1,
 		parentMenu: 0,
 		name: "Yêu cầu tuyển dụng",
-		icon: "pi pi-fw pi-users",
-		role: [MANAGER, HR_MANAGER, HR],
+		icon: "pi pi-fw pi-book",
+		role: [MANAGER, HR_MANAGER, HR, INTERVIEWER],
 	},
 	{
 		id: 2,
@@ -59,7 +59,7 @@ export const PERMISSION_MENU = [
 		id: 4,
 		parentMenu: 0,
 		name: "Ứng viên",
-		icon: "pi pi-fw pi-video",
+		icon: "pi pi-fw pi-users",
 		role: [HR_MANAGER, HR],
 	},
 	{
@@ -80,7 +80,7 @@ export const PERMISSION_MENU = [
 		id: 7,
 		parentMenu: 0,
 		name: "Lịch phỏng vấn",
-		icon: "pi pi-fw pi-cog",
+		icon: "pi pi-fw pi-calendar",
 		role: [MANAGER, HR_MANAGER, HR, INTERVIEWER],
 	},
 	{
@@ -101,7 +101,7 @@ export const PERMISSION_MENU = [
 		id: 10,
 		parentMenu: 0,
 		name: "Đánh giá ứng viên",
-		icon: "pi pi-fw pi-calendar",
+		icon: "pi pi-fw pi-star",
 		role: [MANAGER, HR_MANAGER, HR, INTERVIEWER],
 	},
 	{
@@ -109,7 +109,7 @@ export const PERMISSION_MENU = [
 		parentMenu: 10,
 		name: "Đánh giá",
 		path: CANDIDATE_INTERVIEW_LIST,
-		role: [MANAGER, HR_MANAGER, INTERVIEWER],
+		role: [MANAGER, INTERVIEWER],
 	},
 	{
 		id: 12,
@@ -121,7 +121,8 @@ export const PERMISSION_MENU = [
 	{
 		id: 13,
 		parentMenu: 0,
-		name: "Quản lý User",
+		name: "Quản lý",
+		icon: "pi pi-fw pi-cog",
 		role: [HR_MANAGER],
 	},
 	{

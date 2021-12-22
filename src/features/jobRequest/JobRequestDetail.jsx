@@ -84,6 +84,14 @@ const JobRequestDetail = (props) => {
 								}}
 							></td>
 						</tr>
+						<tr>
+							<th>Yêu cầu dự án:</th>
+							<td
+								dangerouslySetInnerHTML={{
+									__html: jobDetail?.request,
+								}}
+							></td>
+						</tr>
 					</tbody>
 				</table>
 			</div>
