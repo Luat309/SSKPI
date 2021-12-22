@@ -76,7 +76,6 @@ const CandidateCreat = () => {
 			formData.append("email", data.email);
 			setErrEmail("");
 		}
-
 		formData.append("name", data.name);
 		formData.append("phone", data.phone);
 		formData.append("source", data.source);
@@ -296,12 +295,7 @@ const CandidateCreat = () => {
 									id=""
 									{...register("status", { required: true })}
 								>
-									<option value="Vòng CV">Vòng CV</option>
-									<option value="Sắp xếp PV">
-										Sắp xếp PV
-									</option>
-									<option value="PV Pass">PV Pass</option>
-									<option value="PV Faild">PV Faild</option>
+									<option value="0">Sắp xếp PV</option>
 								</select>
 								{errors.status && (
 									<span

@@ -10,16 +10,14 @@ import { useDispatch } from "react-redux";
 import { getCandidateInterview } from "redux/candidateInterview/action";
 import { getCandidateInterviews } from "redux/candidateInterview/selector";
 import { fetchInterview } from "redux/interview/actionCreator";
-import { getJobRequest } from "redux/jobRequest/selector";
 import CandidateInterview from "./CandidateInterview";
 
 const items = [{ label: "Đánh Giá Ứng viên" }, { label: " Đánh giá" }];
 const CandidateInterviewList = () => {
 	const dispatch = useDispatch();
-	const job = useSelector(getJobRequest);
+	const { data: job } = useSelector((state) => state.jobRequest);
 	const [isOpen, setIsOpen] = useState(false);
 	const { data } = useSelector((state) => state.interview);
-	console.log(data);
 	const candidateInterview = useSelector(getCandidateInterviews);
 	const { user } = JSON.parse(localStorage.getItem("currentUser"));
 	const [dateInterview, setDateInterview] = useState();

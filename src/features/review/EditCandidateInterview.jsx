@@ -1,3 +1,5 @@
+import CustomBreadCrumb from "components/CustomBreadCrumb";
+import { CANDIDATE_INTERVIEW_SHOW } from "constants/appPath";
 import { Button } from "primereact/button";
 import { useEffect } from "react";
 
@@ -112,23 +114,28 @@ const EditCandidateInterview = () => {
 			return "";
 		}
 		dispatch(editCandidateInterview(data));
-		history.push("");
+		history.push(CANDIDATE_INTERVIEW_SHOW);
 	};
 	return (
-		<div className="card">
-			<form onSubmit={handleSubmit(onSubmit)}>
-				<div className="p-fluid p-formgrid p-grid">{formRender}</div>
-				<Button
-					style={{
-						display: "block",
-						margin: "0 auto",
-						marginTop: "30px",
-					}}
-					type="submit"
-					label={"Lưu"}
-				/>
-			</form>
-		</div>
+		<>
+			<CustomBreadCrumb items={items} />
+			<div className="card">
+				<form onSubmit={handleSubmit(onSubmit)}>
+					<div className="p-fluid p-formgrid p-grid">
+						{formRender}
+					</div>
+					<Button
+						style={{
+							display: "block",
+							margin: "0 auto",
+							marginTop: "30px",
+						}}
+						type="submit"
+						label={"Lưu"}
+					/>
+				</form>
+			</div>
+		</>
 	);
 };
 

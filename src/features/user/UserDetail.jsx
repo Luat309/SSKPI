@@ -31,7 +31,7 @@ const UserDetail = () => {
 		{
 			name: "role",
 			label: "Chức vụ",
-			value: POSITION[userI?.roles[0].id],
+			value: POSITION[userI?.roles?.[0].id],
 		},
 	];
 

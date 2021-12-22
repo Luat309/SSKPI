@@ -210,18 +210,11 @@ const CandidateEdit = () => {
 									defaultValue={detailId?.status}
 									{...register("status", { required: true })}
 								>
-									<option value="Vòng CV">Vòng CV</option>
-									<option value="CV pass vòng 1 (hr)">
-										CV pass vòng 1 (hr)
-									</option>
-									<option value="CV pass vòng 2 (TBP)">
-										CV pass vòng 2 (TBP)
-									</option>
-									<option value="Sắp xếp PV">
-										Sắp xếp PV
-									</option>
-									<option value="PV Pass">PV Pass</option>
-									<option value="PV Faild">PV Faild</option>
+									<option value="0">Sắp xếp PV</option>
+									<option value="1">vòng 1 </option>
+									<option value="2">Vòng 2</option>
+									<option value="3">PV Pass </option>
+									<option value="4">PV Faild</option>
 								</select>
 								{errors.phone && (
 									<span
