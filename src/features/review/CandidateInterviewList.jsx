@@ -7,11 +7,9 @@ import { Dialog } from "primereact/dialog";
 import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { useDispatch } from "react-redux";
-import { getCandidate } from "redux/candidate/action";
 import { getCandidateInterview } from "redux/candidateInterview/action";
 import { getCandidateInterviews } from "redux/candidateInterview/selector";
 import { fetchInterview } from "redux/interview/actionCreator";
-import { fetchJobRequest } from "redux/jobRequest/actionCreator";
 import { getJobRequest } from "redux/jobRequest/selector";
 import CandidateInterview from "./CandidateInterview";
 
@@ -21,13 +19,14 @@ const CandidateInterviewList = () => {
 	const job = useSelector(getJobRequest);
 	const [isOpen, setIsOpen] = useState(false);
 	const { data } = useSelector((state) => state.interview);
+	console.log(data);
 	const candidateInterview = useSelector(getCandidateInterviews);
 	const { user } = JSON.parse(localStorage.getItem("currentUser"));
 	const [dateInterview, setDateInterview] = useState();
 	useEffect(() => {
 		dispatch(fetchInterview());
 		dispatch(getCandidateInterview());
-	}, []);
+	}, [dispatch]);
 
 	const filter = data.filter((item) => {
 		const exist = item.receiver.find((value) => Number(value) === user.id);

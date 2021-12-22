@@ -11,9 +11,13 @@ import { fetchJobRequest } from "redux/jobRequest/actionCreator";
 import { ERROR_FORM_MESSAGE, STATUS_REQUEST } from "constants/app";
 import { CANDIDATE } from "constants/appPath";
 import { useState } from "react";
+import { Dialog } from "primereact/dialog";
 
 const CandidateCreat = () => {
-	const items = [{ label: "Ứng viên" }, { label: " Thêm ứng viên" }];
+	const items = [
+		{ label: "Ứng viên", url: CANDIDATE },
+		{ label: " Thêm ứng viên" },
+	];
 	const history = useHistory();
 	const dispatch = useDispatch();
 	const status = useSelector(getStatusJobRequest);
@@ -22,7 +26,8 @@ const CandidateCreat = () => {
 	const [errImg, setErrImg] = useState();
 	const [errEmail, setErrEmail] = useState();
 	const { cadidate } = useSelector((state) => state.cadidate);
-
+	const [showMessage, setShowMessage] = useState(false);
+	const [idCandidate, setIdCandidate] = useState();
 	useEffect(() => {
 		if (status === STATUS_REQUEST.IDLE) {
 			dispatch(fetchJobRequest());
@@ -37,6 +42,7 @@ const CandidateCreat = () => {
 	} = useForm({});
 
 	let formData = new FormData();
+
 	const onHandleSubmit = (data) => {
 		if (
 			(data.image[0] && data.image[0].type === "image/jpeg") ||
@@ -63,7 +69,9 @@ const CandidateCreat = () => {
 		}
 		const findEmail = cadidate.find((item) => item.email === data.email);
 		if (findEmail) {
+			setIdCandidate(findEmail?.id);
 			setErrEmail("Email đã tồn tại");
+			setShowMessage(true);
 		} else {
 			formData.append("email", data.email);
 			setErrEmail("");
@@ -84,9 +92,36 @@ const CandidateCreat = () => {
 			reset();
 		}
 	};
+	const dialogFooter = (
+		<div className="p-d-flex p-jc-center">
+			<Button
+				label="Cập nhật"
+				onClick={() =>
+					history.push(`/admin/candidate/edit/${idCandidate}`)
+				}
+			/>
+			<Button
+				label="Quay lại"
+				className="p-button-text"
+				onClick={() => setShowMessage(false)}
+			/>
+		</div>
+	);
 
 	return (
 		<>
+			<Dialog
+				visible={showMessage}
+				onHide={() => setShowMessage(false)}
+				position="top"
+				footer={dialogFooter}
+				style={{ width: "25%" }}
+			>
+				<div className="container">
+					Đã tồn tạo ứng viên này . Bạn muốn cập nhât thông tin ứng
+					viên đó không ?
+				</div>
+			</Dialog>
 			<CustomBreadCrumb items={items} />
 			<div className="card">
 				<form onSubmit={handleSubmit(onHandleSubmit)}>
