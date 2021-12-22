@@ -1,3 +1,4 @@
+import PermissionButton from "components/PermissionButton";
 import { Button } from "primereact/button";
 import { useEffect } from "react";
 
@@ -118,7 +119,8 @@ const EditCandidateInterview = () => {
 		<div className="card">
 			<form onSubmit={handleSubmit(onSubmit)}>
 				<div className="p-fluid p-formgrid p-grid">{formRender}</div>
-				<Button
+				<PermissionButton
+					name='editEvaluate'
 					style={{
 						display: "block",
 						margin: "0 auto",
