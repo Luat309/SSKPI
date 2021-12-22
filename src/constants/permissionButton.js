@@ -17,8 +17,8 @@ const PERMISSION_BUTTON = {
 
     //INTERVIEW CANDIDATE
     viewDetailEvaluate: [MANAGER, HR_MANAGER, HR, INTERVIEWER],
-    evaluate: [INTERVIEWER],
-    editEvaluate: [INTERVIEWER],
+    evaluate: [INTERVIEWER, MANAGER],
+    editEvaluate: [INTERVIEWER, MANAGER],
 
     //CADIDATE
     detailCandidate: [HR_MANAGER, HR],
