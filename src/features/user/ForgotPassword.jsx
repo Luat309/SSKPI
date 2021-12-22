@@ -1,5 +1,6 @@
 import { FORGOT_PASSWORD } from "constants/appPath";
 import { Button } from "primereact/button";
+import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { useDispatch } from "react-redux";
 import { useHistory } from "react-router";
@@ -10,6 +11,7 @@ import genElementsForm from "utils/genElementsForm";
 const ForgotPassword = () => {
 	const history = useHistory();
 	const dispatch = useDispatch();
+	const [error, setError] = useState();
 	const {
 		control,
 		formState: { errors },
@@ -26,6 +28,7 @@ const ForgotPassword = () => {
 	];
 	const service = new UserService();
 	const formRender = genElementsForm(fields, control, errors);
+	let err;
 	const onHandleSubmit = async (data) => {
 		try {
 			await service.forgotPassword({
@@ -34,8 +37,8 @@ const ForgotPassword = () => {
 				original_url: `http://localhost:8080${FORGOT_PASSWORD}`,
 			});
 			dispatch(showMessage("Bạn vui lòng check mail ?"));
-		} catch (error) {
-			return error;
+		} catch ({ response }) {
+			setError(response?.data?.message?.[0]);
 		}
 	};
 	return (
@@ -43,6 +46,7 @@ const ForgotPassword = () => {
 			<h1 style={{ textAlign: "center", marginTop: "10%" }}>
 				Tìm tài khoản của bạn
 			</h1>
+			<p style={{ textAlign: "center", color: "red" }}>{error}</p>
 			<form onSubmit={handleSubmit(onHandleSubmit)}>
 				<div className="p-fluid p-formgrid p-grid flex-direction align-items">
 					{formRender}

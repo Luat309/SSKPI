@@ -18,7 +18,7 @@ import { compareTimeFromTo } from "utils/compareTime";
 import "./style.scss";
 import CandidateColumnList from "./CandidateColumnList";
 import PermissionButton from "components/PermissionButton";
-import { CANDIDATE, CANDIDATE_CREATE } from "constants/appPath";
+import { CANDIDATE_CREATE } from "constants/appPath";
 
 const CandidateList = () => {
 	const items = [
@@ -30,7 +30,7 @@ const CandidateList = () => {
 	const [showMessage, setShowMessage] = useState(false);
 	const [detailCandidate, setDetailCandidate] = useState();
 	const { cadidate } = useSelector((state) => state.cadidate);
-	const [filter, setFilter] = useState(false);
+	const [filter] = useState(false);
 	const job = useSelector(getJobRequest);
 	const [deadLine, setDeadLine] = useState([]);
 	const [statusFilter, setStatusFilter] = useState([]);
@@ -83,6 +83,18 @@ const CandidateList = () => {
 			  })
 			: "";
 	};
+
+	const statusBodyTemplate = (rowData) => {
+		const status = {
+			0: "Sắp sếp PV",
+			1: "Vòng 1",
+			2: "Vòng 2",
+			3: "PV Pass",
+			4: "PV Faild",
+		};
+		return status[rowData?.status];
+	};
+
 	const actionBodyTemplate = (rowData) => {
 		return (
 			<div>
@@ -317,7 +329,11 @@ const CandidateList = () => {
 							header="Dự án"
 							body={jobBodyTemplate}
 						></Column>
-						<Column field="status" header="Trạng thái"></Column>
+						<Column
+							field="status"
+							header="Trạng thái"
+							body={statusBodyTemplate}
+						></Column>
 						<Column
 							field=""
 							header="Hành động"

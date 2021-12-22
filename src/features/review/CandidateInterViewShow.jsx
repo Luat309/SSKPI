@@ -13,7 +13,6 @@ import { useEffect } from "react";
 import { useDispatch } from "react-redux";
 import { getCandidateInterview } from "redux/candidateInterview/action";
 import formatTime from "utils/formatTime";
-
 const items = [{ label: "Đánh Giá Ứng viên" }, { label: " Đánh giá" }];
 const CandidateInterViewShow = () => {
 	const [isOpen, setIsOpen] = useState(false);
@@ -31,14 +30,13 @@ const CandidateInterViewShow = () => {
 		return value.map((val) => {
 			if (val.user_id === user?.id) {
 				return val;
-			} else if (user?.id === 2 || user?.id === 0) {
-				return value;
+			} else if (user?.role === 2 || user?.role === 1) {
+				return val;
 			} else {
 				return "";
 			}
 		});
 	};
-
 	const slipt = (val) => {
 		return val.filter((item) => item !== "");
 	};
