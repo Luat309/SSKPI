@@ -1,21 +1,26 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useHistory, useLocation } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import CustomBreadCrumb from "components/CustomBreadCrumb";
 
 import { Button } from "primereact/button";
+import { Toast } from 'primereact/toast';
 import { getApprovedJobRequest } from "redux/jobRequest/selector";
 import { getCandidates } from "redux/candidate/selector";
 import { createInterview } from "redux/interview/actionCreator";
 import { getManagerAndHrManager } from "redux/user/selector";
 import { KHONG_TON_TAI, ROUND_INTERVIEW } from "constants/app";
 import genElementsForm from "utils/genElementsForm";
-import formatTime from "utils/formatTime"
+import formatTime from "utils/formatTime";
+import { compareAfter, compareTimeFromTo } from "utils/compareTime";
+import { getIdsCandidate } from "redux/interview/selector";
 
 const items = [{ label: "Lịch phỏng vấn" }, { label: "Tạo lịch phỏng vấn" }];
 
 const FormInsertInterview = (props) => {
+	const toast = useRef(null);
+
 	const dispatch = useDispatch();
 	const history = useHistory();
 	const location = useLocation();
@@ -29,6 +34,7 @@ const FormInsertInterview = (props) => {
 	const [loading, setLoading] = useState(false);
 
 	const job = watch("job_id");
+	const round_no = watch("round_no");
 
 	const users = useSelector(getManagerAndHrManager).map(user => ({
 		...user, 
@@ -36,22 +42,27 @@ const FormInsertInterview = (props) => {
 	}));
 	const approvedJobRequest = useSelector(getApprovedJobRequest);
 	const candidates = useSelector(getCandidates);
+	const idCandidates = useSelector(getIdsCandidate);
+	const iterviews = useSelector(state => state?.interview?.data)
 	let candidateFilter = [];
 
-	if(job) candidateFilter = candidates.filter(candidate => candidate.job_id === job.id).map(candidate => ({
-		...candidate,
-		name: candidate.name + ' - ' + candidate.email
-	}));
+	if(job) candidateFilter = candidates.filter(
+		candidate => candidate.job_id === job.id && idCandidates.indexOf(candidate?.id) === -1)
+		.map(candidate => ({
+			...candidate,
+			name: candidate.name + ' - ' + candidate.email
+		})
+	);
 
 	const fields = [
 		{ label: "Tiêu đề", name: "title", type: "inputText" },
 		{ label: "Ngày phỏng vấn", name: "date", type: "calender", autoFocus: true, },
 		{ label: "Người phỏng vấn", name: "receiver", type: "select", options: users, optionLabel: "name", },
-		{ label: "Thời gian bắt đầu", name: "time_end", type: "calender", showTime: true, timeOnly: true, isMindata: false, customClass: "p-field p-col-12 p-md-3" },
+		{ label: "Thời gian bắt đầu", name: "time_start", type: "calender", showTime: true, timeOnly: true, isMindata: false, customClass: "p-field p-col-12 p-md-3" },
 		{ label: "Thời gian kết thúc", name: "time_end", type: "calender", showTime: true, timeOnly: true, isMindata: false, customClass: "p-field p-col-12 p-md-3" },
 		{ label: "Địa điểm", name: "location", type: "inputText" },
-		{ label: "Vòng phỏng vấn", name: "round_no", type: "dropdown", options: ROUND_INTERVIEW, optionLabel: "title", },
 		{ label: "Yêu cầu tuyển dụng", name: "job_id", type: "dropdown", options: approvedJobRequest, optionLabel: "title", },
+		{ label: "Vòng phỏng vấn", name: "round_no", type: "dropdown", options: ROUND_INTERVIEW, optionLabel: "title", },
 		{ label: "Ứng viên", name: "name_candidate", type: "select", options: candidateFilter, optionLabel: "name", },
 	];
 
@@ -60,6 +71,43 @@ const FormInsertInterview = (props) => {
 	const onSubmit = (data) => {
 		try {
 			const date = formatTime.formatShortsDate(data.date) ;
+			if(!compareAfter(data.time_end, data.time_start)) {
+				toast.current.show({
+					severity:'warn', 
+					summary: 'Thời gian không hợp lệ', 
+					detail:'Thời gian bắt đầu phỏng vấn không được nhỏ hơn thời gian kết thúc!', 
+					life: 3000
+				});
+
+				return;
+			}
+
+			// console.log(data, "Nhu con cua");
+			let checkDuplicate = false;
+
+			iterviews.forEach((interview) => {
+				if(
+					compareTimeFromTo(interview?.time_start, data?.time_start, data?.time_end) || 
+					compareTimeFromTo(data?.time_start, interview?.time_start, interview?.time_end)
+				) {
+					data.receiver.forEach(nguoinhan => {
+						if(interview?.receiver.indexOf(String(nguoinhan.id)) !== KHONG_TON_TAI) {
+							checkDuplicate = true;
+
+							toast.current.show({
+								severity:'warn', 
+								summary: 'Thời gian không hợp lệ', 
+								detail: nguoinhan.name + ' đã có lịch phỏng vấn vào lúc ' + interview?.time_start + ' - ' + interview?.time_end, 
+								life: 6000
+							});
+						}
+					})
+				}
+			})
+
+			if(checkDuplicate) {
+				return;
+			}
 
 			setLoading(true);
 
@@ -114,6 +162,8 @@ const FormInsertInterview = (props) => {
 
 	return (
 		<>
+			<Toast ref={toast} />
+
 			<CustomBreadCrumb items={items} />
 			<div className="card">
 				<form onSubmit={handleSubmit(onSubmit)}>

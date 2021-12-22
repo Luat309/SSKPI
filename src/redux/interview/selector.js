@@ -1,4 +1,5 @@
 import formatTime from "utils/formatTime";
+import moment from 'moment';
 
 export const getInterviews = (state) => {
 	const jobRequest = {};
@@ -32,3 +33,9 @@ export const getInterviews = (state) => {
 	});
 };
 export const getStatusInterview = (state) => state.interview.status;
+
+export const getIdsCandidate = (state) => {
+	return state.interview?.data
+	.filter(item => moment(item?.time_end).isAfter())
+	.map(item => item?.name_candidate?.id)
+}

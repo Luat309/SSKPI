@@ -20,7 +20,6 @@ import { APPROVAL_STATUS } from "constants/app";
 import formatTime from "utils/formatTime";
 import { compareTimeFromTo } from "utils/compareTime";
 import { genStyle, genColumns } from "utils/genColumns";
-import JobRequestService from "services/JobRequestService";
 
 const JobRequestList = () => {
 	const dispatch = useDispatch();
@@ -29,7 +28,6 @@ const JobRequestList = () => {
 	const [filter, setFilter] = useState(false);
 	const [statusFilter, setStatusFilter] = useState([]);
 	const [deadLine, setDeadLine] = useState([]);
-	const service = new JobRequestService();
 
 	const items = [
 		{ label: "Yêu cầu tuyển dụng", url: "/admin/jobrequest" },
