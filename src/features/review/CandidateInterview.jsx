@@ -9,7 +9,6 @@ import genElementsForm from "utils/genElementsForm";
 import "./style.scss";
 
 const { user } = JSON.parse(localStorage.getItem("currentUser"));
-console.log(user?.id);
 
 const CandidateInterview = ({ data: item }) => {
 	const history = useHistory();

@@ -1,6 +1,5 @@
 import CustomBreadCrumb from "components/CustomBreadCrumb";
 import CustomDataTable from "components/CustomDataTable";
-import moment from "moment";
 import { Column } from "primereact/column";
 import React, { useState } from "react";
 import { useSelector } from "react-redux";
@@ -13,10 +12,10 @@ import PermissionButton from "components/PermissionButton";
 import { useEffect } from "react";
 import { useDispatch } from "react-redux";
 import { getCandidateInterview } from "redux/candidateInterview/action";
+import formatTime from "utils/formatTime";
 
 const items = [{ label: "Đánh Giá Ứng viên" }, { label: " Đánh giá" }];
 const CandidateInterViewShow = () => {
-	moment.locale("vi");
 	const [isOpen, setIsOpen] = useState(false);
 	const [valueDetail, setValueDetail] = useState();
 	const history = useHistory();
@@ -26,13 +25,30 @@ const CandidateInterViewShow = () => {
 
 	useEffect(() => {
 		dispatch(getCandidateInterview());
-	}, []);
+	}, [dispatch]);
+
+	const filterRole = (value) => {
+		return value.map((val) => {
+			if (val.user_id === user?.id) {
+				return val;
+			} else if (user?.id === 2 || user?.id === 0) {
+				return value;
+			} else {
+				return "";
+			}
+		});
+	};
+
+	const slipt = (val) => {
+		return val.filter((item) => item !== "");
+	};
+
 	const timeBodyTemplate = (rowData) => {
 		return (
 			<p>
-				{moment(rowData.time_start).format("lll")}
+				{formatTime.formatTimeDate(rowData.time_start)}
 				{" - "}
-				{moment(rowData.time_end).format("lll")}
+				{formatTime.formatTimeDate(rowData.time_end)}
 			</p>
 		);
 	};
@@ -63,7 +79,7 @@ const CandidateInterViewShow = () => {
 
 				{Number(rowData?.user_id) === Number(user.id) && (
 					<PermissionButton
-						name="evaluate"
+						name="editEvaluate"
 						tooltip="Cập nhật"
 						onClick={() =>
 							history.push(
@@ -90,7 +106,9 @@ const CandidateInterViewShow = () => {
 			</Dialog>
 			<CustomBreadCrumb items={items} />
 			<div className="card">
-				<CustomDataTable dataTable={candidateInterview}>
+				<CustomDataTable
+					dataTable={slipt(filterRole(candidateInterview))}
+				>
 					<Column
 						field="candidate_id"
 						header="Thời gian phỏng vấn"

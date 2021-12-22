@@ -1,4 +1,5 @@
 import CustomBreadCrumb from "components/CustomBreadCrumb";
+import { CANDIDATE } from "constants/appPath";
 import { Button } from "primereact/button";
 import React, { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
@@ -8,7 +9,10 @@ import { editCandidate } from "redux/candidate/action";
 import { getJobRequest } from "redux/jobRequest/selector";
 import "./style.scss";
 
-const items = [{ label: "Ứng viên" }, { label: " Sửa ứng viên" }];
+const items = [
+	{ label: "Ứng viên", url: CANDIDATE },
+	{ label: " Sửa ứng viên" },
+];
 const CandidateEdit = () => {
 	const { id } = useParams();
 	const history = useHistory();
