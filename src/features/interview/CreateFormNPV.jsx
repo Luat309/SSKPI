@@ -98,7 +98,7 @@ const FormInsertInterview = (props) => {
 								severity:'warn', 
 								summary: 'Thời gian không hợp lệ', 
 								detail: nguoinhan.name + ' đã có lịch phỏng vấn vào lúc ' + interview?.time_start + ' - ' + interview?.time_end, 
-								life: 6000
+								life: 15000
 							});
 						}
 					})
