@@ -6,3 +6,7 @@ export const compareTimeFromTo = (timeCompare, timeFrom, timeTo) => {
 		moment(timeCompare).isBefore(timeTo)
 	);
 };
+
+export const compareAfter = (timeStart, timeEnd) => {
+	return moment(timeStart).isAfter(timeEnd);
+}

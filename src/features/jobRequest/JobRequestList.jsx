@@ -133,15 +133,6 @@ const JobRequestList = () => {
 				/>
 				<PermissionButton
 					name="viewDetailJobRequest"
-					tooltip="Báo cáo tuyển dụng"
-					onClick={() =>
-						history.push(`/admin/jobrequest/${data.id}/report`)
-					}
-					className="p-button-rounded p-button-text p-button-danger"
-					icon="pi pi-chart-line"
-				/>
-				<PermissionButton
-					name="viewDetailJobRequest"
 					tooltip="Xuất file PDF"
 					onClick={() => handleExport(data)}
 					className="p-button-rounded p-button-text p-button-danger"
