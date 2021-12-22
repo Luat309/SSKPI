@@ -18,9 +18,13 @@ import { compareTimeFromTo } from "utils/compareTime";
 import "./style.scss";
 import CandidateColumnList from "./CandidateColumnList";
 import PermissionButton from "components/PermissionButton";
+import { CANDIDATE, CANDIDATE_CREATE } from "constants/appPath";
 
 const CandidateList = () => {
-	const items = [{ label: "Ứng viên" }, { label: " Danh sách ứng viên" }];
+	const items = [
+		{ label: "Ứng viên", url: "/admin/candidate" },
+		{ label: " Danh sách ứng viên" },
+	];
 	const dispath = useDispatch();
 	const history = useHistory();
 	const [showMessage, setShowMessage] = useState(false);
@@ -172,7 +176,7 @@ const CandidateList = () => {
 				onHide={() => setShowMessage(false)}
 				position="top"
 				footer={dialogFooter}
-				style={{ width: "80%" }}
+				style={{ width: "60%" }}
 			>
 				<div className="container">
 					<div className="flex ">
@@ -180,14 +184,14 @@ const CandidateList = () => {
 							<img
 								src="https://image.shutterstock.com/image-vector/avatar-vector-male-profile-gray-260nw-538707355.jpg"
 								alt=""
-								width="250px"
+								width="30%"
 								className="mx-5"
 							/>
 						) : (
 							<img
 								src={`http://34.124.182.156/storage/images/candidate/${detailCandidate?.image}`}
 								alt=""
-								width="250px"
+								width="30%"
 								className="mx-5"
 							/>
 						)}
@@ -196,6 +200,10 @@ const CandidateList = () => {
 								<tr>
 									<th>Tên: </th>
 									<td>{detailCandidate?.name}</td>
+								</tr>
+								<tr>
+									<th>Email: </th>
+									<td>{detailCandidate?.email}</td>
 								</tr>
 								<tr>
 									<th>Số điện thoại: </th>
@@ -207,7 +215,7 @@ const CandidateList = () => {
 								</tr>
 								<tr>
 									<th>Kinh nghiệm: </th>
-									<td>{detailCandidate?.experience}</td>
+									<td>{detailCandidate?.experience} năm</td>
 								</tr>
 								<tr>
 									<th>CV: </th>
@@ -240,24 +248,18 @@ const CandidateList = () => {
 			</Dialog>
 
 			<CustomBreadCrumb items={items} />
-			<div>
-				<h4>
-					Thêm nhiều thành viên
-					<br /> bằng bảng Excel
-				</h4>
-			</div>
 			<div className="input-search">
-				<Button
-					icon="pi pi-filter"
-					className="p-button-raised p-button-help mr-1"
-					label="Bộ lọc"
-					onClick={() => setFilter(!filter)}
-				/>
 				<SplitButton
 					icon="pi pi-filter"
 					className="p-button-raised"
 					label="Kiểu hiển thị"
 					model={itemsBtn}
+				/>
+				<Button
+					label="Thêm ứng viên"
+					className="p-button-raised "
+					onClick={() => history.push(CANDIDATE_CREATE)}
+					style={{ marginLeft: "20px" }}
 				/>
 			</div>
 

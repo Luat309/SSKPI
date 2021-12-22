@@ -31,7 +31,7 @@ export const fetchJobRequest = () => async (dispatch) => {
 			});
 		})
 		.catch((error) => {
-			if(error.response.status === 401) {
+			if (error.response.status === 401) {
 				alert("Phiên đăng nhập đã hết hạn!");
 
 				localStorage.removeItem("currentUser");

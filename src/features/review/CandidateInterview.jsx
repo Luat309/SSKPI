@@ -9,7 +9,6 @@ import genElementsForm from "utils/genElementsForm";
 import "./style.scss";
 
 const { user } = JSON.parse(localStorage.getItem("currentUser"));
-console.log(user?.id);
 
 const CandidateInterview = ({ data: item }) => {
 	const history = useHistory();
@@ -129,19 +128,21 @@ const CandidateInterview = ({ data: item }) => {
 	const formRender = genElementsForm(fields, control, errors);
 
 	return (
-		<form onSubmit={handleSubmit(onSubmit)}>
-			<div className="p-fluid p-formgrid p-grid">{formRender}</div>
-
-			<Button
-				style={{
-					display: "block",
-					margin: "0 auto",
-					marginTop: "30px",
-				}}
-				type="submit"
-				label={"Lưu"}
-			/>
-		</form>
+		<>
+			<h3 style={{ textAlign: "center" }}>Đánh giá</h3>
+			<form onSubmit={handleSubmit(onSubmit)}>
+				<div className="p-fluid p-formgrid p-grid">{formRender}</div>
+				<Button
+					style={{
+						display: "block",
+						margin: "0 auto",
+						marginTop: "30px",
+					}}
+					type="submit"
+					label={"Lưu"}
+				/>
+			</form>
+		</>
 	);
 };
 

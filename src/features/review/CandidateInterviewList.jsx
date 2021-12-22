@@ -7,18 +7,15 @@ import { Dialog } from "primereact/dialog";
 import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { useDispatch } from "react-redux";
-import { getCandidate } from "redux/candidate/action";
 import { getCandidateInterview } from "redux/candidateInterview/action";
 import { getCandidateInterviews } from "redux/candidateInterview/selector";
 import { fetchInterview } from "redux/interview/actionCreator";
-import { fetchJobRequest } from "redux/jobRequest/actionCreator";
-import { getJobRequest } from "redux/jobRequest/selector";
 import CandidateInterview from "./CandidateInterview";
 
 const items = [{ label: "Đánh Giá Ứng viên" }, { label: " Đánh giá" }];
 const CandidateInterviewList = () => {
 	const dispatch = useDispatch();
-	const job = useSelector(getJobRequest);
+	const { data: job } = useSelector((state) => state.jobRequest);
 	const [isOpen, setIsOpen] = useState(false);
 	const { data } = useSelector((state) => state.interview);
 	const candidateInterview = useSelector(getCandidateInterviews);
@@ -27,7 +24,7 @@ const CandidateInterviewList = () => {
 	useEffect(() => {
 		dispatch(fetchInterview());
 		dispatch(getCandidateInterview());
-	}, []);
+	}, [dispatch]);
 
 	const filter = data.filter((item) => {
 		const exist = item.receiver.find((value) => Number(value) === user.id);

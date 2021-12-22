@@ -20,7 +20,7 @@ const UpdateUser = ({ user }) => {
 		{ role: 3, name: "Người phỏng vấn " },
 	];
 	useEffect(() => {
-		const newData = { ...user, roles: user?.roles[0]?.id };
+		const newData = { ...user, roles: user?.roles?.[0]?.id };
 		reset({ ...newData });
 	}, []);
 	const onHandleSubmit = (data) => {

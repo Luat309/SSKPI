@@ -1,4 +1,5 @@
 import CustomBreadCrumb from "components/CustomBreadCrumb";
+import { CANDIDATE } from "constants/appPath";
 import { Button } from "primereact/button";
 import React, { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
@@ -8,7 +9,10 @@ import { editCandidate } from "redux/candidate/action";
 import { getJobRequest } from "redux/jobRequest/selector";
 import "./style.scss";
 
-const items = [{ label: "Ứng viên" }, { label: " Sửa ứng viên" }];
+const items = [
+	{ label: "Ứng viên", url: CANDIDATE },
+	{ label: " Sửa ứng viên" },
+];
 const CandidateEdit = () => {
 	const { id } = useParams();
 	const history = useHistory();
@@ -206,18 +210,11 @@ const CandidateEdit = () => {
 									defaultValue={detailId?.status}
 									{...register("status", { required: true })}
 								>
-									<option value="Vòng CV">Vòng CV</option>
-									<option value="CV pass vòng 1 (hr)">
-										CV pass vòng 1 (hr)
-									</option>
-									<option value="CV pass vòng 2 (TBP)">
-										CV pass vòng 2 (TBP)
-									</option>
-									<option value="Sắp xếp PV">
-										Sắp xếp PV
-									</option>
-									<option value="PV Pass">PV Pass</option>
-									<option value="PV Faild">PV Faild</option>
+									<option value="0">Sắp xếp PV</option>
+									<option value="1">vòng 1 </option>
+									<option value="2">Vòng 2</option>
+									<option value="3">PV Pass </option>
+									<option value="4">PV Faild</option>
 								</select>
 								{errors.phone && (
 									<span

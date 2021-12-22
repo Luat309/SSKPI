@@ -28,7 +28,6 @@ const JobRequestList = () => {
 	const [filter, setFilter] = useState(false);
 	const [statusFilter, setStatusFilter] = useState([]);
 	const [deadLine, setDeadLine] = useState([]);
-
 	const items = [
 		{ label: "Yêu cầu tuyển dụng", url: "/admin/jobrequest" },
 		{ label: "Danh sách yêu cầu" },
@@ -65,7 +64,7 @@ const JobRequestList = () => {
 
 	const handleExport = async (data) => {
 		window.location.href = "http://34.124.182.156/api/pdf/" + data.id;
-	}
+	};
 
 	const genFormatTimeCol = (data) => {
 		return formatTime.formatShortDate(data.deadline);
@@ -135,7 +134,9 @@ const JobRequestList = () => {
 				<PermissionButton
 					name="viewDetailJobRequest"
 					tooltip="Báo cáo tuyển dụng"
-					onClick={() => history.push(`/admin/jobrequest/${data.id}/report`)}
+					onClick={() =>
+						history.push(`/admin/jobrequest/${data.id}/report`)
+					}
 					className="p-button-rounded p-button-text p-button-danger"
 					icon="pi pi-chart-line"
 				/>
@@ -198,7 +199,11 @@ const JobRequestList = () => {
 	}, [deadLine, statusFilter, data]);
 
 	const cols = [
-		{ field: "title", header: "Tên dự án", style: genStyle("250px", false) },
+		{
+			field: "title",
+			header: "Tên dự án",
+			style: genStyle("250px", false),
+		},
 		{
 			field: "deadline",
 			body: genFormatTimeCol,

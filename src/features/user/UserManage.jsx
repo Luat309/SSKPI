@@ -44,7 +44,7 @@ const UserList = () => {
 		setDetailUser(null);
 		if (role === 999) return data;
 		return data.filter((item) => {
-			return item?.roles[0]?.id === role;
+			return item?.roles?.[0]?.id === role;
 		});
 	}, [data, role]);
 
