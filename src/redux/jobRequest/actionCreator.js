@@ -46,75 +46,75 @@ export const fetchJobRequest = () => async (dispatch) => {
 		});
 };
 
-export const insertJobRequest = (data, callbackSuc, callbackErr) => (dispatch) => {
-	dispatch({
-		type: JOBREQUEST_INSERT,
-		message: "Đang xử lý",
-	});
-
-	service
-		.createJobRequest(data)
-		.then((res) => {
-			dispatch(fetchJobRequest());
-
-			dispatch(showMessage("Thêm yêu cầu thành công!"));
-			callbackSuc();
-
-			emitEvent(
-				`<b>${nameCurrentUser}</b> đã tạo mới một yêu cầu tuyển dụng`,
-				`/admin/jobrequest/detail/${res.data.id}`,
-				"JOBREQUEST/CREATED"
-			);
-
-			emitEvent(
-				`Bạn có một yêu cầu tuyển dụng cần phê duyệt`,
-				`/admin/jobrequest/approval/${res.data.id}`,
-				"JOBREQUEST/WAITING"
-			);
-		})
-		.catch((error) => {
-			callbackErr();
-
-			dispatch({
-				type: JOBREQUEST_INSERT,
-				message: error.message,
-			});
-
-			dispatch(showMessage(error.message, "ERROR"));
+export const insertJobRequest =
+	(data, callbackSuc, callbackErr) => (dispatch) => {
+		dispatch({
+			type: JOBREQUEST_INSERT,
+			message: "Đang xử lý",
 		});
-};
 
-export const updateJobRequest = (data, callbackSuc, callbackErr) => async (dispatch) => {
-	dispatch({
-		type: JOBREQUEST_UPDATE,
-		message: "Đang xử lý",
-	});
+		service
+			.createJobRequest(data)
+			.then((res) => {
+				dispatch(fetchJobRequest());
 
-	service
-		.editJobRequest(data)
-		.then((res) => {
-			dispatch(fetchJobRequest());
+				dispatch(showMessage("Thêm yêu cầu thành công!"));
+				callbackSuc();
 
-			dispatch(showMessage("Cập nhật thành công!"));
-			callbackSuc();
+				emitEvent(
+					`<b>${nameCurrentUser}</b> đã tạo mới một yêu cầu tuyển dụng`,
+					`/admin/jobrequest/detail/${res.data.id}`,
+					"JOBREQUEST/CREATED"
+				);
 
-			emitEvent(
-				`<b>${nameCurrentUser}</b> đã cập nhật một yêu cầu tuyển dụng`,
-				`/admin/jobrequest/detail/${data.id}`,
-				"JOBREQUEST/UPDATED"
-			);
-		})
-		.catch((error) => {
-			callbackErr();
+				emitEvent(
+					`Bạn có một yêu cầu tuyển dụng cần phê duyệt`,
+					`/admin/jobrequest/approval/${res.data.id}`,
+					"JOBREQUEST/WAITING"
+				);
+			})
+			.catch(({ response }) => {
+				dispatch({
+					type: JOBREQUEST_INSERT,
+					message: response?.data.message,
+				});
 
-			dispatch({
-				type: JOBREQUEST_UPDATE,
-				message: error.message,
+				dispatch(showMessage(response?.data.message, "ERROR"));
 			});
+	};
 
-			dispatch(showMessage(error.message, "ERROR"));
+export const updateJobRequest =
+	(data, callbackSuc, callbackErr) => async (dispatch) => {
+		dispatch({
+			type: JOBREQUEST_UPDATE,
+			message: "Đang xử lý",
 		});
-};
+
+		service
+			.editJobRequest(data)
+			.then((res) => {
+				dispatch(fetchJobRequest());
+
+				dispatch(showMessage("Cập nhật thành công!"));
+				callbackSuc();
+
+				emitEvent(
+					`<b>${nameCurrentUser}</b> đã cập nhật một yêu cầu tuyển dụng`,
+					`/admin/jobrequest/detail/${data.id}`,
+					"JOBREQUEST/UPDATED"
+				);
+			})
+			.catch((error) => {
+				callbackErr();
+
+				dispatch({
+					type: JOBREQUEST_UPDATE,
+					message: error.message,
+				});
+
+				dispatch(showMessage(error.message, "ERROR"));
+			});
+	};
 
 export const deleteJobRequest = (id) => (dispatch) => {
 	dispatch({
