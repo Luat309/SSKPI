@@ -46,8 +46,9 @@ const FormInsertInterview = (props) => {
 	const iterviews = useSelector(state => state?.interview?.data)
 	let candidateFilter = [];
 
-	if(job) candidateFilter = candidates.filter(
-		candidate => candidate.job_id === job.id && idCandidates.indexOf(candidate?.id) === -1)
+	if(job && round_no) candidateFilter = candidates
+		.filter(candidate => candidate.job_id === job.id && idCandidates.indexOf(candidate?.id) === -1)
+		.filter(candidate => Number(candidate.status) === Number(round_no) - 1)
 		.map(candidate => ({
 			...candidate,
 			name: candidate.name + ' - ' + candidate.email
@@ -70,25 +71,55 @@ const FormInsertInterview = (props) => {
 
 	const onSubmit = (data) => {
 		try {
-			const date = formatTime.formatShortsDate(data.date) ;
-			if(!compareAfter(data.time_end, data.time_start)) {
+			const date = formatTime.formatShortsDate(data.date);
+
+			if(compareAfter(date + ' 08:00:00', date + ' ' + formatTime.formatHour(data.time_start))) {
+
 				toast.current.show({
-					severity:'warn', 
+					severity: 'warn', 
 					summary: 'Thời gian không hợp lệ', 
-					detail:'Thời gian bắt đầu phỏng vấn không được nhỏ hơn thời gian kết thúc!', 
-					life: 3000
+					detail:	'Thời gian bắt đầu phỏng vấn phải sau 8 giờ sáng!', 
+					life: 15000
 				});
 
 				return;
 			}
 
-			// console.log(data, "Nhu con cua");
+			if(compareAfter(date + ' ' + formatTime.formatHour(data.time_end), date + ' 20:00:00')) {
+				toast.current.show({
+					severity: 'warn', 
+					summary: 'Thời gian không hợp lệ', 
+					detail:	'Thời gian kết thúc phỏng vấn phải kết thúc trước 8 giờ tối!', 
+					life: 15000
+				});
+
+				return;
+			}
+
+			if(compareAfter(data.time_start, data.time_end)) {
+				toast.current.show({
+					severity:'warn', 
+					summary: 'Thời gian không hợp lệ', 
+					detail:'Thời gian bắt đầu phỏng vấn không được nhỏ hơn thời gian kết thúc!', 
+					life: 15000
+				});
+
+				return;
+			}
+
 			let checkDuplicate = false;
 
 			iterviews.forEach((interview) => {
 				if(
-					compareTimeFromTo(interview?.time_start, data?.time_start, data?.time_end) || 
-					compareTimeFromTo(data?.time_start, interview?.time_start, interview?.time_end)
+					compareTimeFromTo(
+						interview?.time_start, 
+						date + ' ' + formatTime.formatHour(data?.time_start), 
+						date + ' ' + formatTime.formatHour(data?.time_end)
+						) || compareTimeFromTo(
+						date + ' ' + formatTime.formatHour(data?.time_start), 
+						interview?.time_start, 
+						interview?.time_end
+						)
 				) {
 					data.receiver.forEach(nguoinhan => {
 						if(interview?.receiver.indexOf(String(nguoinhan.id)) !== KHONG_TON_TAI) {
@@ -130,7 +161,8 @@ const FormInsertInterview = (props) => {
 							.join(",")
 							.split(",").length,
 					},
-					() => history.push("/admin/interview")
+					() => history.push("/admin/interview"),
+					() => setLoading(false)
 				)
 			);
 		} catch (error) {

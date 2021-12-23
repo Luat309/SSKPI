@@ -75,9 +75,9 @@ const FormInsertJobRequest = () => {
 		setLoading(true);
 
 		dispatch(
-			insertJobRequest({...data, deadline: formatTime.formatShortsDate(data.deadline)}, () => {
-				history.push("/admin/jobrequest");
-			})
+			insertJobRequest({...data, deadline: formatTime.formatShortsDate(data.deadline)}, 
+			() => { history.push("/admin/jobrequest"); }),
+			() => { setLoading(false); }
 		);
 	};
 
