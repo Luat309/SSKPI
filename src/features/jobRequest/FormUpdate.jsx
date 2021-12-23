@@ -74,7 +74,8 @@ const FormUpdateJobRequest = () => {
 		dispatch(
 			updateJobRequest(
 				{...data, deadline: formatTime.formatShortsDate(data?.deadline)},
-				() => { history.push("/admin/jobrequest") }
+				() => { history.push("/admin/jobrequest") },
+				() => { setLoading(false); }
 			)
 		);
 	};

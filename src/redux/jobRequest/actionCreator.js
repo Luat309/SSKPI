@@ -46,7 +46,7 @@ export const fetchJobRequest = () => async (dispatch) => {
 		});
 };
 
-export const insertJobRequest = (data, callback) => (dispatch) => {
+export const insertJobRequest = (data, callbackSuc, callbackErr) => (dispatch) => {
 	dispatch({
 		type: JOBREQUEST_INSERT,
 		message: "Đang xử lý",
@@ -58,7 +58,7 @@ export const insertJobRequest = (data, callback) => (dispatch) => {
 			dispatch(fetchJobRequest());
 
 			dispatch(showMessage("Thêm yêu cầu thành công!"));
-			callback();
+			callbackSuc();
 
 			emitEvent(
 				`<b>${nameCurrentUser}</b> đã tạo mới một yêu cầu tuyển dụng`,
@@ -73,6 +73,8 @@ export const insertJobRequest = (data, callback) => (dispatch) => {
 			);
 		})
 		.catch((error) => {
+			callbackErr();
+
 			dispatch({
 				type: JOBREQUEST_INSERT,
 				message: error.message,
@@ -82,7 +84,7 @@ export const insertJobRequest = (data, callback) => (dispatch) => {
 		});
 };
 
-export const updateJobRequest = (data, callback) => async (dispatch) => {
+export const updateJobRequest = (data, callbackSuc, callbackErr) => async (dispatch) => {
 	dispatch({
 		type: JOBREQUEST_UPDATE,
 		message: "Đang xử lý",
@@ -94,7 +96,7 @@ export const updateJobRequest = (data, callback) => async (dispatch) => {
 			dispatch(fetchJobRequest());
 
 			dispatch(showMessage("Cập nhật thành công!"));
-			callback();
+			callbackSuc();
 
 			emitEvent(
 				`<b>${nameCurrentUser}</b> đã cập nhật một yêu cầu tuyển dụng`,
@@ -103,6 +105,8 @@ export const updateJobRequest = (data, callback) => async (dispatch) => {
 			);
 		})
 		.catch((error) => {
+			callbackErr();
+
 			dispatch({
 				type: JOBREQUEST_UPDATE,
 				message: error.message,

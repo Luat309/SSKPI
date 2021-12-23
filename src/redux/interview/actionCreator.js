@@ -41,7 +41,7 @@ export const fetchInterview = () => async(dispatch) => {
         });
 };
 
-export const createInterview = (data, callback) => async(dispatch) => {
+export const createInterview = (data, callbackSuc, callbackErr) => async(dispatch) => {
     dispatch({
         type: INTERVIEW_INSERT,
         status: STATUS_REQUEST.LOADING,
@@ -55,7 +55,7 @@ export const createInterview = (data, callback) => async(dispatch) => {
 
             dispatch(showMessage("Tạo lịch phỏng vấn thành công!"));
 
-            callback();
+            callbackSuc();
 
             emitEvent(
                 `<b>${nameCurrentUser}</b> đã tạo mới một lịch phỏng vấn`,
@@ -64,6 +64,8 @@ export const createInterview = (data, callback) => async(dispatch) => {
             );
         })
         .catch((error) => {
+            callbackErr();
+
             dispatch({
                 type: INTERVIEW_INSERT,
                 message: error.message,

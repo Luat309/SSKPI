@@ -79,7 +79,7 @@ const FormInsertInterview = (props) => {
 					severity: 'warn', 
 					summary: 'Thời gian không hợp lệ', 
 					detail:	'Thời gian bắt đầu phỏng vấn phải sau 8 giờ sáng!', 
-					life: 3000
+					life: 15000
 				});
 
 				return;
@@ -90,7 +90,7 @@ const FormInsertInterview = (props) => {
 					severity: 'warn', 
 					summary: 'Thời gian không hợp lệ', 
 					detail:	'Thời gian kết thúc phỏng vấn phải kết thúc trước 8 giờ tối!', 
-					life: 3000
+					life: 15000
 				});
 
 				return;
@@ -101,7 +101,7 @@ const FormInsertInterview = (props) => {
 					severity:'warn', 
 					summary: 'Thời gian không hợp lệ', 
 					detail:'Thời gian bắt đầu phỏng vấn không được nhỏ hơn thời gian kết thúc!', 
-					life: 3000
+					life: 15000
 				});
 
 				return;
@@ -161,7 +161,8 @@ const FormInsertInterview = (props) => {
 							.join(",")
 							.split(",").length,
 					},
-					() => history.push("/admin/interview")
+					() => history.push("/admin/interview"),
+					() => setLoading(false)
 				)
 			);
 		} catch (error) {
