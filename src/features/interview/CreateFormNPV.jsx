@@ -71,8 +71,32 @@ const FormInsertInterview = (props) => {
 
 	const onSubmit = (data) => {
 		try {
-			const date = formatTime.formatShortsDate(data.date) ;
-			if(!compareAfter(data.time_end, data.time_start)) {
+			const date = formatTime.formatShortsDate(data.date);
+
+			if(compareAfter(date + ' 08:00:00', date + ' ' + formatTime.formatHour(data.time_start))) {
+
+				toast.current.show({
+					severity: 'warn', 
+					summary: 'Thời gian không hợp lệ', 
+					detail:	'Thời gian bắt đầu phỏng vấn phải sau 8 giờ sáng!', 
+					life: 3000
+				});
+
+				return;
+			}
+
+			if(compareAfter(date + ' ' + formatTime.formatHour(data.time_end), date + ' 20:00:00')) {
+				toast.current.show({
+					severity: 'warn', 
+					summary: 'Thời gian không hợp lệ', 
+					detail:	'Thời gian kết thúc phỏng vấn phải kết thúc trước 8 giờ tối!', 
+					life: 3000
+				});
+
+				return;
+			}
+
+			if(compareAfter(data.time_start, data.time_end)) {
 				toast.current.show({
 					severity:'warn', 
 					summary: 'Thời gian không hợp lệ', 
@@ -83,13 +107,19 @@ const FormInsertInterview = (props) => {
 				return;
 			}
 
-			// console.log(data, "Nhu con cua");
 			let checkDuplicate = false;
 
 			iterviews.forEach((interview) => {
 				if(
-					compareTimeFromTo(interview?.time_start, data?.time_start, data?.time_end) || 
-					compareTimeFromTo(data?.time_start, interview?.time_start, interview?.time_end)
+					compareTimeFromTo(
+						interview?.time_start, 
+						date + ' ' + formatTime.formatHour(data?.time_start), 
+						date + ' ' + formatTime.formatHour(data?.time_end)
+						) || compareTimeFromTo(
+						date + ' ' + formatTime.formatHour(data?.time_start), 
+						interview?.time_start, 
+						interview?.time_end
+						)
 				) {
 					data.receiver.forEach(nguoinhan => {
 						if(interview?.receiver.indexOf(String(nguoinhan.id)) !== KHONG_TON_TAI) {
@@ -112,28 +142,28 @@ const FormInsertInterview = (props) => {
 
 			setLoading(true);
 
-			dispatch(
-				createInterview(
-					{
-						...data,
-						time_start: date + " " + formatTime.formatHour(data.time_start),
-						time_end: date + " " + formatTime.formatHour(data.time_end),
-						date: undefined,
-						job_id: data.job_id?.id,
-						receiver: data.receiver
-							.map((item) => item.id)
-							.join(","),
-						name_candidate: data.name_candidate
-							.map((item) => item.id)
-							.join(","),
-						totalReceiver: data.receiver
-							.map((item) => item.id)
-							.join(",")
-							.split(",").length,
-					},
-					() => history.push("/admin/interview")
-				)
-			);
+			// dispatch(
+			// 	createInterview(
+			// 		{
+			// 			...data,
+			// 			time_start: date + " " + formatTime.formatHour(data.time_start),
+			// 			time_end: date + " " + formatTime.formatHour(data.time_end),
+			// 			date: undefined,
+			// 			job_id: data.job_id?.id,
+			// 			receiver: data.receiver
+			// 				.map((item) => item.id)
+			// 				.join(","),
+			// 			name_candidate: data.name_candidate
+			// 				.map((item) => item.id)
+			// 				.join(","),
+			// 			totalReceiver: data.receiver
+			// 				.map((item) => item.id)
+			// 				.join(",")
+			// 				.split(",").length,
+			// 		},
+			// 		() => history.push("/admin/interview")
+			// 	)
+			// );
 		} catch (error) {
 			return error;
 		}
