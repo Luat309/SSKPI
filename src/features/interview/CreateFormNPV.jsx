@@ -46,8 +46,9 @@ const FormInsertInterview = (props) => {
 	const iterviews = useSelector(state => state?.interview?.data)
 	let candidateFilter = [];
 
-	if(job) candidateFilter = candidates.filter(
-		candidate => candidate.job_id === job.id && idCandidates.indexOf(candidate?.id) === -1)
+	if(job && round_no) candidateFilter = candidates
+		.filter(candidate => candidate.job_id === job.id && idCandidates.indexOf(candidate?.id) === -1)
+		.filter(candidate => Number(candidate.status) === Number(round_no) - 1)
 		.map(candidate => ({
 			...candidate,
 			name: candidate.name + ' - ' + candidate.email
