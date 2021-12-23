@@ -142,28 +142,28 @@ const FormInsertInterview = (props) => {
 
 			setLoading(true);
 
-			// dispatch(
-			// 	createInterview(
-			// 		{
-			// 			...data,
-			// 			time_start: date + " " + formatTime.formatHour(data.time_start),
-			// 			time_end: date + " " + formatTime.formatHour(data.time_end),
-			// 			date: undefined,
-			// 			job_id: data.job_id?.id,
-			// 			receiver: data.receiver
-			// 				.map((item) => item.id)
-			// 				.join(","),
-			// 			name_candidate: data.name_candidate
-			// 				.map((item) => item.id)
-			// 				.join(","),
-			// 			totalReceiver: data.receiver
-			// 				.map((item) => item.id)
-			// 				.join(",")
-			// 				.split(",").length,
-			// 		},
-			// 		() => history.push("/admin/interview")
-			// 	)
-			// );
+			dispatch(
+				createInterview(
+					{
+						...data,
+						time_start: date + " " + formatTime.formatHour(data.time_start),
+						time_end: date + " " + formatTime.formatHour(data.time_end),
+						date: undefined,
+						job_id: data.job_id?.id,
+						receiver: data.receiver
+							.map((item) => item.id)
+							.join(","),
+						name_candidate: data.name_candidate
+							.map((item) => item.id)
+							.join(","),
+						totalReceiver: data.receiver
+							.map((item) => item.id)
+							.join(",")
+							.split(",").length,
+					},
+					() => history.push("/admin/interview")
+				)
+			);
 		} catch (error) {
 			return error;
 		}
