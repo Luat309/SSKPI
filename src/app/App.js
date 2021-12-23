@@ -15,7 +15,7 @@ function App() {
 	const [visibleRight, setVisibleRight] = useState(false);
 	const [layout, setLayout] = useState(() => {
 		const layout = JSON.parse(localStorage.getItem("layout"));
-		return layout ?? { name: "Vertical", code: "VERTICAL" };
+		return layout ?? { name: "Horizontal", code: "HORIZONTAL" };
 	});
 	const [fontFamily, setFontFamily] = useState(() => {
 		const fontFamily = JSON.parse(localStorage.getItem("fontFamily"));

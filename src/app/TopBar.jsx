@@ -74,59 +74,59 @@ const TopBar = (props) => {
 		setNotifications(data);
 	};
 
-	// useEffect(() => {
-	// 	getNoti();
+	useEffect(() => {
+		getNoti();
 
-	// 	document.addEventListener("click", () => {
-	// 		setVisible(false);
-	// 	});
-	// }, [jobRequest]);
+		document.addEventListener("click", () => {
+			setVisible(false);
+		});
+	}, [jobRequest]);
 
-	// useEffect(() => {
-	// 	socket.on("res_notification", async (data) => {
-	// 		const idCurrentUser = getIdCurrentUser();
+	useEffect(() => {
+		socket.on("res_notification", async (data) => {
+			const idCurrentUser = getIdCurrentUser();
 
-	// 		if (data.userCreated !== idCurrentUser) {
-	// 			playSound();
+			if (data.userCreated !== idCurrentUser) {
+				playSound();
 
-	// 			const requests = {};
-	// 			jobRequest.forEach((item) => (requests[item?.id] = item));
+				const requests = {};
+				jobRequest.forEach((item) => (requests[item?.id] = item));
 
-	// 			const res = await fetch(NODEJS + "api/node/notifications", {
-	// 				method: "post",
-	// 				body: JSON.stringify({
-	// 					id: getIdCurrentUser(),
-	// 					role: getRoleCurrentUser(),
-	// 				}),
-	// 				headers: {
-	// 					"Content-Type": "application/json",
-	// 				},
-	// 			});
-	// 			let data = await res.json();
+				const res = await fetch(NODEJS + "api/node/notifications", {
+					method: "post",
+					body: JSON.stringify({
+						id: getIdCurrentUser(),
+						role: getRoleCurrentUser(),
+					}),
+					headers: {
+						"Content-Type": "application/json",
+					},
+				});
+				let data = await res.json();
 
-	// 			data = data.filter((item) => {
-	// 				if (
-	// 					["JOBREQUEST/APPROVED", "JOBREQUEST/REJECTED"].indexOf(
-	// 						item.type
-	// 					) !== -1
-	// 				) {
-	// 					const idJob = item.path.split("/")[4];
+				data = data.filter((item) => {
+					if (
+						["JOBREQUEST/APPROVED", "JOBREQUEST/REJECTED"].indexOf(
+							item.type
+						) !== -1
+					) {
+						const idJob = item.path.split("/")[4];
 
-	// 					const idCurrentUser = getIdCurrentUser();
+						const idCurrentUser = getIdCurrentUser();
 
-	// 					if (idCurrentUser == requests[idJob]?.petitioner?.id)
-	// 						return true;
+						if (idCurrentUser == requests[idJob]?.petitioner?.id)
+							return true;
 
-	// 					return false;
-	// 				}
+						return false;
+					}
 
-	// 				return true;
-	// 			});
+					return true;
+				});
 
-	// 			setNotifications(data);
-	// 		}
-	// 	});
-	// }, []);
+				setNotifications(data);
+			}
+		});
+	}, []);
 
 	const menu = useRef(null);
 	const itemsAccount = [
