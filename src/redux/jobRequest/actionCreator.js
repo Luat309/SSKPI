@@ -72,13 +72,13 @@ export const insertJobRequest = (data, callback) => (dispatch) => {
 				"JOBREQUEST/WAITING"
 			);
 		})
-		.catch((error) => {
+		.catch(({ response }) => {
 			dispatch({
 				type: JOBREQUEST_INSERT,
-				message: error.message,
+				message: response?.data.message,
 			});
 
-			dispatch(showMessage(error.message, "ERROR"));
+			dispatch(showMessage(response?.data.message, "ERROR"));
 		});
 };
 
